@@ -1,35 +1,131 @@
 <script setup>
-import { useGlobalStore } from "../stores/global"; 
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { useUserStore } from "../stores/user";
 
-const { user } = useGlobalStore();
+const userStore = useUserStore();
+const isLoggedIn = computed(() => !!userStore.user.id);
+
+const showLoginDropdown = ref(false);
+const dropdownRef = ref(null);
+
+const profileRoute = computed(() => {
+  if (userStore.user.userType === "professional") {
+    return "/professionals";
+  }
+
+  return "/my-userprofile";
+});
+
+const toggleDropdown = () => {
+  showLoginDropdown.value = !showLoginDropdown.value;
+};
+
+const closeDropdown = () => {
+  showLoginDropdown.value = false;
+};
+
+const handleClickOutside = (event) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    closeDropdown();
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg sticky-top bg-light shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container">
+      <img src="/favicon.ico" alt="logo" />
+      <router-link to="/" class="navbar-brand ps-2">bildex</router-link>
 
-      <router-link class="navbar-brand text-dark fw-bold" :to="{name: 'Home'}">AllRICE</router-link>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#main-nav"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ms-auto">
+      <div class="collapse navbar-collapse" id="main-nav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item">
+            <router-link to="/" class="nav-link">Home</router-link>
+          </li>
 
-          <router-link class="nav-link" :to="{name: 'ActiveProducts'}" v-if="!user.isAdmin">Products</router-link>
+          <li class="nav-item">
+            <router-link to="/blogs" class="nav-link">Blogs</router-link>
+          </li>
 
-          <router-link class="nav-link" :to="{name: 'Cart'}" v-if="user.email && !user.isAdmin">Cart</router-link>
+         <li
+           ref="dropdownRef"
+           class="nav-item dropdown login-dropdown"
+         >
+           <button
+             type="button"
+             class="btn btn-outline-primary dropdown-toggle ms-lg-2"
+             @click.stop="toggleDropdown"
+           >
+             <span class="material-symbols-outlined">account_circle</span>
+           </button>
 
-          <router-link class="nav-link" :to="{name: 'Register'}" v-if="!user.email">Register</router-link>
+           <ul
+             class="dropdown-menu dropdown-menu-end"
+             :class="{ show: showLoginDropdown }"
+           >
+             <template v-if="!isLoggedIn">
+               <li>
+                 <router-link to="/login-user" class="dropdown-item" @click="closeDropdown">
+                   as User
+                 </router-link>
+               </li>
+               <li>
+                 <router-link to="/login-prof" class="dropdown-item" @click="closeDropdown">
+                   as Professional
+                 </router-link>
+               </li>
+               <li>
+                 <router-link to="/login-handyman" class="dropdown-item" @click="closeDropdown">
+                   as Handyman
+                 </router-link>
+               </li>
+             </template>
 
-          <router-link class="nav-link" :to="{name: 'Login'}" v-if="!user.email">Login</router-link>
-       
-          <router-link class="nav-link" :to="{name: 'Logout'}" v-if="user.email">Logout</router-link>
+             <template v-else>
+               <li>
+                 <router-link :to="profileRoute" class="dropdown-item" @click="closeDropdown">
+                   My Profile
+                 </router-link>
+               </li>
+               <li>
+                 <router-link to="/logout" class="dropdown-item" @click="closeDropdown">
+                   Logout
+                 </router-link>
+               </li>
+             </template>
+           </ul>
+         </li>
 
-        </div>
+        </ul>
       </div>
-
-    </div>  
+    </div>
   </nav>
 </template>
+
+<style scoped>
+.login-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  min-width: 190px;
+  margin-top: 0.4rem;
+}
+</style>
