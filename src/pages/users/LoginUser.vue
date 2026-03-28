@@ -4,12 +4,12 @@
       <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-5">
           <div class="card auth-card border-0 shadow-sm">
-            <div class="card-body p-4 p-md-5">
-              <div class="text-center mb-4">
-                <h2 class="fw-bold mb-2">Login User</h2>
-                <p class="text-muted mb-0">Access your account securely.</p>
-              </div>
+            <div class="auth-header text-center">
+              <h2 class="auth-title mb-2">Login User</h2>
+              <p class="auth-subtitle mb-0">Access your account securely.</p>
+            </div>
 
+            <div class="card-body p-4 p-md-5">
               <form @submit.prevent="loginUser">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
@@ -46,7 +46,7 @@
                 <div class="d-grid">
                   <button
                     type="submit"
-                    class="btn btn-primary"
+                    class="btn login-btn"
                     :disabled="loading"
                   >
                     {{ loading ? "Logging in..." : "Login" }}
@@ -54,7 +54,7 @@
                 </div>
               </form>
 
-              <p class="text-center text-muted mt-4 mb-0">
+              <p class="text-center auth-footer-text mt-4 mb-0">
                 No account yet?
                 <router-link to="/register-user" class="auth-link">
                   Register here
@@ -132,27 +132,109 @@ const loginUser = async () => {
 <style scoped>
 .auth-page {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #f4f6f8;
+  display: flex;
+  align-items: center;
 }
 
 .auth-card {
   border-radius: 20px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 62, 134, 0.1);
+}
+
+.auth-header {
+  background-color: #003e86;
+  border-bottom: 3px solid #ffc107;
+  padding: 2rem 1.5rem 1.75rem;
+}
+
+.auth-title {
+  color: #ffc107;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.auth-subtitle {
+  color: #f4f6f8;
+  font-size: 0.95rem;
+}
+
+.form-label {
+  color: #003e86;
+  font-weight: 700;
+  margin-bottom: 0.45rem;
 }
 
 .form-control {
-  min-height: 46px;
-  border-radius: 12px;
-}
-
-.btn {
   min-height: 48px;
   border-radius: 12px;
-  font-weight: 600;
+  border: 1px solid rgba(0, 62, 134, 0.18);
+  color: #003e86;
+  background-color: #ffffff;
+}
+
+.form-control:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.18);
+}
+
+.form-control::placeholder {
+  color: #9aa4b2;
+}
+
+.login-btn {
+  min-height: 50px;
+  border-radius: 12px;
+  font-weight: 700;
+  background-color: #003e86;
+  color: #ffffff;
+  border: 1px solid #003e86;
+  transition: all 0.25s ease;
+}
+
+.login-btn:hover:not(:disabled) {
+  background-color: #ffc107;
+  color: #003e86;
+  border-color: #ffc107;
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .auth-link,
 .forgot-link {
+  color: #003e86;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
+  transition: color 0.25s ease;
+}
+
+.auth-link:hover,
+.forgot-link:hover {
+  color: #ffc107;
+}
+
+.auth-footer-text {
+  color: #6c757d;
+}
+
+@media (max-width: 767.98px) {
+  .auth-page {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    align-items: flex-start;
+  }
+
+  .auth-header {
+    padding: 1.75rem 1rem 1.5rem;
+  }
+
+  .auth-title {
+    font-size: 1.6rem;
+  }
 }
 </style>

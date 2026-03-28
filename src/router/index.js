@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
 import Home from "../pages/Home.vue";
+import About from "../pages/About.vue";
+import Feedback from "../pages/Feedback.vue";
 
 // Users
 import RegisterUser from "../pages/users/RegisterUser.vue";
@@ -35,6 +37,16 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: Home
+    },
+    {
+      path: "/feedback",
+      name: "feedback",
+      component: Feedback
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: About
     },
 
 // Users

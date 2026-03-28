@@ -1,66 +1,49 @@
 <template>
   <div class="home-page">
-    <!-- HERO -->
     <section class="hero-section d-flex align-items-center">
       <div class="hero-overlay"></div>
 
       <div class="container position-relative hero-content">
-        <div class="row align-items-center min-vh-100">
-          <div class="col-12 col-lg-7 text-center text-lg-start">
-            <p class="hero-label mb-3">Trusted Construction Network</p>
-
-            <h1 class="hero-title mb-3">
-              Find construction experts near you
-            </h1>
-
-            <p class="hero-text mb-4">
-              Connect with reliable engineers, architects, and construction
-              specialists for residential, commercial, and industrial projects.
+        <div class="row justify-content-center text-center">
+          <div class="col-12 col-lg-10">
+            <p class="hero-label mb-2">TRUSTED CONSTRUCTION NETWORK</p>
+            <h1 class="hero-title mb-3">Find construction experts near you</h1>
+            <p class="hero-subtitle mx-auto mb-4">
+              Connect with trusted handymen, designers, contractors, and suppliers
+              for residential, commercial, and industrial projects.
             </p>
 
-            <div class="search-box p-2 p-md-3 mb-4">
-              <div class="row g-2 align-items-center">
+            <div class="search-wrapper shadow-lg">
+              <div class="row g-2">
                 <div class="col-12 col-md-5">
                   <input
-                    v-model="searchKeyword"
                     type="text"
-                    class="form-control form-control-lg"
-                    placeholder="Search profession"
+                    class="form-control search-input"
+                    placeholder="What services are you looking for?"
+                    v-model="search.service"
                   />
                 </div>
 
-                <div class="col-12 col-md-5">
+                <div class="col-12 col-md-4">
                   <input
-                    v-model="searchLocation"
                     type="text"
-                    class="form-control form-control-lg"
-                    placeholder="Enter city or province"
+                    class="form-control search-input"
+                    placeholder="Enter city or province..."
+                    v-model="search.location"
                   />
                 </div>
 
-                <div class="col-12 col-md-2">
-                  <button
-                    class="btn btn-primary btn-lg w-100"
-                    @click="goToProfessionals"
-                  >
+                <div class="col-12 col-md-3">
+                  <button class="btn w-100 search-btn">
                     Search
                   </button>
                 </div>
               </div>
             </div>
 
-            <div
-              class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start"
-            >
-              <router-link to="/professionals" class="btn btn-primary btn-lg px-4">
-                Browse Professionals
-              </router-link>
-
-              <router-link
-                to="/register-professional"
-                class="btn btn-outline-light btn-lg px-4"
-              >
-                Join as Professional
+            <div class="join-provider-wrapper mt-5">
+              <router-link to="/register-prof" class="join-provider-link">
+                Join as Service Provider for FREE now!
               </router-link>
             </div>
           </div>
@@ -68,83 +51,82 @@
       </div>
     </section>
 
-    <!-- FEATURED PROFESSIONALS -->
-    <section class="featured-section py-5">
+    <section class="services-section py-5">
       <div class="container">
         <div class="text-center mb-5">
-          <h2 class="section-title">Featured Professionals</h2>
-          <p class="section-text">
-            Explore skilled professionals ready to support your next project.
+          <h2 class="section-title">Explore Services</h2>
+          <p class="section-subtitle">
+            Find the right expert for your project needs
           </p>
         </div>
 
-        <div v-if="loading" class="text-center py-5">
-          <div class="spinner-border text-primary mb-3" role="status"></div>
-          <p class="mb-0">Loading featured professionals...</p>
-        </div>
-
-        <div v-else-if="error" class="alert alert-danger text-center">
-          {{ error }}
-        </div>
-
-        <div v-else-if="featuredProfessionals.length === 0" class="text-center text-muted py-4">
-          No professionals found.
-        </div>
-
-        <div v-else class="row g-4">
+        <div class="row g-4">
           <div
-            v-for="professional in featuredProfessionals"
-            :key="professional._id"
-            class="col-12 col-md-6 col-lg-4"
+            v-for="item in highlights"
+            :key="item.title"
+            class="col-12 col-sm-6 col-lg-3"
           >
-            <router-link
-              :to="`/professionals/${professional._id}`"
-              class="text-decoration-none text-dark"
-            >
-              <div class="card professional-card h-100 border-0 shadow-sm">
-                <img
-                  :src="getProfileImage(professional)"
-                  :alt="`${professional.firstName} ${professional.lastName}`"
-                  class="card-img-top"
-                  style="height: 240px; object-fit: cover;"
-                />
-
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="card-title mb-0">
-                      {{ professional.title }} {{ professional.firstName }} {{ professional.lastName }}
-                    </h5>
-
-                    <span
-                      v-if="professional.isPremium"
-                      class="badge bg-warning text-dark"
-                    >
-                      Premium
-                    </span>
-                  </div>
-
-                  <p class="text-primary fw-semibold mb-2">
-                    {{ professional.profession }}
-                  </p>
-
-                  <p class="text-muted mb-2">
-                    <i class="bi bi-geo-alt-fill me-1"></i>
-                    {{ professional.location }}, {{ professional.country }}
-                  </p>
-
-                  <p class="card-text">
-                    {{ professional.pitch || "No pitch provided." }}
-                  </p>
+            <div class="card border-0 shadow-sm h-100 highlight-card text-center">
+              <div class="card-body p-4">
+                <div class="icon-circle mx-auto mb-3">
+                  <span class="material-symbols-outlined">{{ item.icon }}</span>
                 </div>
+                <h5 class="service-card-title fw-bold mb-2">{{ item.title }}</h5>
+                <p class="service-card-text mb-0">{{ item.description }}</p>
               </div>
-            </router-link>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="text-center mt-5">
-          <router-link to="/professionals" class="btn btn-dark btn-lg px-4">
-            View All Professionals
-          </router-link>
+    <section class="featured-section py-5">
+      <div class="container">
+        <div
+          v-for="group in featuredExperts"
+          :key="group.category"
+          class="featured-group mb-5"
+        >
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+              <h2 class="section-title mb-1">{{ group.category }}</h2>
+              <p class="section-subtitle mb-0">
+                Featured {{ group.category.toLowerCase() }} professionals
+              </p>
+            </div>
+
+            <button class="btn view-all-btn btn-sm">View All</button>
+          </div>
+
+          <div class="row g-4">
+            <div
+              v-for="expert in group.experts"
+              :key="expert.id"
+              class="col-12 col-sm-6 col-lg-3"
+            >
+              <div class="card shadow-sm h-100 expert-card">
+                <img
+                  :src="expert.image"
+                  class="card-img-top expert-image"
+                  :alt="expert.name"
+                />
+
+                <div class="card-body d-flex flex-column">
+                  <span class="badge expert-badge mb-2 align-self-start">
+                    {{ group.category }}
+                  </span>
+
+                  <h5 class="card-title fw-bold mb-1">{{ expert.name }}</h5>
+                  <p class="expert-location small mb-2">{{ expert.location }}</p>
+                  <p class="card-text expert-description flex-grow-1">
+                    {{ expert.description }}
+                  </p>
+
+                <!--   <button class="btn expert-btn mt-3">View Profile</button> -->
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -152,76 +134,181 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import axios from "axios";
+import { reactive } from "vue";
 
-const router = useRouter();
-
-const searchKeyword = ref("");
-const searchLocation = ref("");
-
-const featuredProfessionals = ref([]);
-const loading = ref(true);
-const error = ref("");
-
-const fallbackImage = "https://via.placeholder.com/500x400?text=No+Image";
-
-const getProfileImage = (profile) => {
-  if (profile.profileIcon) return profile.profileIcon;
-
-  if (
-    profile.portfolioImages &&
-    profile.portfolioImages.length > 0 &&
-    profile.portfolioImages[0].imageUrl
-  ) {
-    return profile.portfolioImages[0].imageUrl;
-  }
-
-  return fallbackImage;
-};
-
-const fetchFeaturedProfessionals = async () => {
-  try {
-    loading.value = true;
-    error.value = "";
-
-    const response = await axios.get("http://localhost:4000/professionals/profess");
-
-    featuredProfessionals.value = (response.data.profiles || []).slice(0, 3);
-  } catch (err) {
-    console.error("Error fetching featured professionals:", err);
-    error.value =
-      err.response?.data?.error || "Failed to load featured professionals.";
-  } finally {
-    loading.value = false;
-  }
-};
-
-const goToProfessionals = () => {
-  router.push({
-    path: "/professionals",
-    query: {
-      profession: searchKeyword.value,
-      location: searchLocation.value
-    }
-  });
-};
-
-onMounted(() => {
-  fetchFeaturedProfessionals();
+const search = reactive({
+  service: "",
+  location: ""
 });
+
+const highlights = [
+  {
+    title: "Handyman",
+    icon: "construction",
+    description: "Skilled repair and maintenance professionals for home and site work."
+  },
+  {
+    title: "Designers",
+    icon: "draw",
+    description: "Creative experts for plans, layouts, and design concepts."
+  },
+  {
+    title: "Contractors",
+    icon: "engineering",
+    description: "Trusted builders for residential, commercial, and industrial projects."
+  },
+  {
+    title: "Suppliers",
+    icon: "inventory_2",
+    description: "Reliable sources for materials, equipment, and construction supplies."
+  }
+];
+
+const featuredExperts = [
+  {
+    category: "Handyman",
+    experts: [
+      {
+        id: 1,
+        name: "Mark Dela Cruz",
+        location: "Quezon City",
+        description: "General repair specialist for electrical, plumbing, and maintenance work.",
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 2,
+        name: "Ramon Perez",
+        location: "Pasig City",
+        description: "Experienced handyman for home repair, installation, and renovation support.",
+        image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 3,
+        name: "Joel Santos",
+        location: "Makati City",
+        description: "On-call repair expert for small construction and maintenance jobs.",
+        image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 4,
+        name: "Eric Mendoza",
+        location: "Taguig City",
+        description: "Reliable service provider for fixtures, carpentry, and repair work.",
+        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80"
+      }
+    ]
+  },
+  {
+    category: "Designer",
+    experts: [
+      {
+        id: 5,
+        name: "Ar. Camille Reyes",
+        location: "Manila",
+        description: "Architectural designer specializing in residential and mixed-use spaces.",
+        image: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 6,
+        name: "Engr. Paul Navarro",
+        location: "Cebu City",
+        description: "Planning and design expert for structural and construction-ready concepts.",
+        image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 7,
+        name: "Ar. Nina Lopez",
+        location: "Davao City",
+        description: "Interior and building designer for modern residential and office projects.",
+        image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 8,
+        name: "Engr. Carlo Torres",
+        location: "Quezon City",
+        description: "CAD, drafting, and floorplan specialist for commercial developments.",
+        image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80"
+      }
+    ]
+  },
+  {
+    category: "Contractor",
+    experts: [
+      {
+        id: 9,
+        name: "BuildPro Works",
+        location: "Muntinlupa City",
+        description: "Full-service contractor for civil, structural, and fit-out works.",
+        image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 10,
+        name: "Prime Construct",
+        location: "Caloocan City",
+        description: "Construction contractor for residential builds and commercial renovations.",
+        image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 11,
+        name: "Northline Builders",
+        location: "Quezon Province",
+        description: "Trusted team for project execution, supervision, and finishing works.",
+        image: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 12,
+        name: "Metro Civil Group",
+        location: "Pasay City",
+        description: "Experienced contractor for infrastructure, commercial, and industrial jobs.",
+        image: "https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?auto=format&fit=crop&w=800&q=80"
+      }
+    ]
+  },
+  {
+    category: "Supplier",
+    experts: [
+      {
+        id: 13,
+        name: "Steel & Build Supply",
+        location: "Valenzuela City",
+        description: "Supplier of structural materials, tools, and project essentials.",
+        image: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 14,
+        name: "Construct Mart",
+        location: "Meycauayan",
+        description: "One-stop source for construction materials and finishing products.",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 15,
+        name: "Pro Equip Source",
+        location: "Marikina City",
+        description: "Equipment, safety gear, and supply solutions for various project sizes.",
+        image: "https://images.unsplash.com/photo-1581092335397-9583eb92d232?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 16,
+        name: "Builders Choice Depot",
+        location: "Bacoor",
+        description: "Reliable partner for hardware, cement, paint, and construction supplies.",
+        image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80"
+      }
+    ]
+  }
+];
 </script>
 
 <style scoped>
 .home-page {
-  background: #f8f9fa;
+  background-color: #f4f6f8;
 }
 
 .hero-section {
+  min-height: 92vh;
   position: relative;
-  min-height: 100vh;
-  background-image: url("https://images.unsplash.com/photo-1504307651254-35680f356dfd");
+  background-image: url("@/assets/images/background-img.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -230,7 +317,9 @@ onMounted(() => {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(10, 15, 25, 0.68);
+  background:
+    linear-gradient(rgba(0, 62, 134, 0.78), rgba(0, 62, 134, 0.78)),
+    rgba(0, 0, 0, 0.2);
 }
 
 .hero-content {
@@ -238,83 +327,211 @@ onMounted(() => {
 }
 
 .hero-label {
-  display: inline-block;
-  font-size: 0.95rem;
+  color: #ffc107;
   font-weight: 700;
-  color: #93c5fd;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.9rem;
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 800;
-  line-height: 1.15;
   color: #ffffff;
-}
-
-.hero-text {
-  font-size: 1.08rem;
-  color: #e5e7eb;
-  max-width: 620px;
-}
-
-.search-box {
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 18px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-  max-width: 860px;
-}
-
-.featured-section {
-  background: #f8f9fa;
-}
-
-.section-title {
-  font-size: 2rem;
+  font-size: 2.3rem;
   font-weight: 800;
-  color: #212529;
+  line-height: 1.2;
 }
 
-.section-text {
-  color: #6c757d;
-  max-width: 620px;
+.hero-subtitle {
+  color: #f4f6f8;
+  max-width: 760px;
+  font-size: 1.05rem;
+}
+
+.search-wrapper {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 193, 7, 0.35);
+  border-radius: 18px;
+  padding: 0.75rem;
+  max-width: 980px;
   margin: 0 auto;
 }
 
-.professional-card {
+.search-input {
+  min-height: 54px;
+  border-radius: 12px;
+  border: 2px solid #ffc107;
+  background-color: #ffffff;
+  color: #003e86;
+}
+
+.search-input:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.2);
+}
+
+.search-btn {
+  min-height: 54px;
+  border-radius: 12px;
+  font-weight: 700;
+  background-color: #ffc107;
+  color: #003e86;
+  border: 2px solid #ffc107;
+  transition: all 0.25s ease;
+}
+
+.search-btn:hover {
+  background-color: #ffffff;
+  color: #003e86;
+  border-color: #ffc107;
+}
+
+.join-provider-wrapper {
+  text-align: center;
+}
+
+.join-provider-link {
+  display: inline-block;
+  color: #ffc107;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid #ffc107;
+  padding-bottom: 2px;
+  transition: all 0.25s ease;
+}
+
+.join-provider-link:hover {
+  color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+
+.services-section {
+  background-color: #f4f6f8;
+}
+
+.featured-section {
+  background-color: #ffffff;
+}
+
+.section-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #003e86;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.highlight-card,
+.expert-card {
   border-radius: 18px;
+  border: 1px solid rgba(0, 62, 134, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  overflow: hidden;
 }
 
-.professional-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.14);
+.highlight-card:hover,
+.expert-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1rem 2rem rgba(0, 62, 134, 0.08);
 }
 
-.card-title {
-  font-size: 1.1rem;
+.service-card-title {
+  color: #003e86;
+}
+
+.service-card-text,
+.expert-description {
+  color: #6c757d;
+}
+
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #003e86;
+  color: #ffc107;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffc107;
+}
+
+.icon-circle .material-symbols-outlined {
+  font-size: 32px;
+}
+
+.view-all-btn,
+.expert-btn {
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.view-all-btn {
+  background-color: transparent;
+  color: #003e86;
+  border: 1px solid #ffc107;
+}
+
+.view-all-btn:hover {
+  background-color: #ffc107;
+  color: #003e86;
+}
+
+.expert-btn {
+  background-color: #003e86;
+  color: #ffffff;
+  border: 1px solid #003e86;
+}
+
+.expert-btn:hover {
+  background-color: #ffc107;
+  color: #003e86;
+  border-color: #ffc107;
+}
+
+.expert-image {
+  height: 220px;
+  object-fit: cover;
+}
+
+.expert-badge {
+  background-color: #ffc107;
+  color: #003e86;
   font-weight: 700;
 }
 
-.card-text {
-  color: #555;
+.expert-location {
+  color: #6c757d;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 991.98px) {
+  .hero-section {
+    min-height: auto;
+    padding: 5rem 0;
+  }
+
   .hero-title {
-    font-size: 2.3rem;
+    font-size: 1.95rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 767.98px) {
   .hero-title {
-    font-size: 1.9rem;
+    font-size: 1.7rem;
   }
 
-  .search-box {
-    border-radius: 14px;
+  .search-wrapper {
+    padding: 0.85rem;
+  }
+
+  .expert-image {
+    height: 200px;
   }
 }
 </style>
