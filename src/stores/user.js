@@ -1,5 +1,6 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+import api from "@/services/api";
 
 export const useUserStore = defineStore("user", () => {
   const user = ref({
@@ -8,20 +9,38 @@ export const useUserStore = defineStore("user", () => {
     userType: localStorage.getItem("userType") || null
   });
 
-  function setUser(userData) {
-    user.value.id = userData.id;
-    user.value.isAdmin = userData.isAdmin ?? false;
-    user.value.userType = userData.userType || "user";
+  const bootstrapped = ref(false);
 
-    localStorage.setItem("userId", user.value.id);
-    localStorage.setItem("isAdmin", user.value.isAdmin);
-    localStorage.setItem("userType", user.value.userType);
+  const isLoggedIn = computed(() => !!user.value.id);
+
+  function setUser(userData) {
+    user.value = {
+      id: userData.id || null,
+      isAdmin: userData.isAdmin ?? false,
+      userType: userData.userType || null
+    };
+
+    if (user.value.id) {
+      localStorage.setItem("userId", user.value.id);
+    } else {
+      localStorage.removeItem("userId");
+    }
+
+    localStorage.setItem("isAdmin", String(user.value.isAdmin));
+
+    if (user.value.userType) {
+      localStorage.setItem("userType", user.value.userType);
+    } else {
+      localStorage.removeItem("userType");
+    }
   }
 
   function unsetUser() {
-    user.value.id = null;
-    user.value.isAdmin = false;
-    user.value.userType = null;
+    user.value = {
+      id: null,
+      isAdmin: false,
+      userType: null
+    };
 
     localStorage.removeItem("token");
     localStorage.removeItem("professionalToken");
@@ -30,5 +49,63 @@ export const useUserStore = defineStore("user", () => {
     localStorage.removeItem("userType");
   }
 
-  return { user, setUser, unsetUser };
+  async function bootstrapAuth() {
+    bootstrapped.value = false;
+
+    const token = localStorage.getItem("token");
+    const professionalToken = localStorage.getItem("professionalToken");
+    const userType = localStorage.getItem("userType");
+
+    try {
+      if (userType === "professional" && professionalToken) {
+        const response = await api.get("/professionals/my/profile");
+
+        if (response.data?.profile?._id) {
+          setUser({
+            id: response.data.profile._id,
+            isAdmin: false,
+            userType: "professional"
+          });
+        } else {
+          unsetUser();
+        }
+      } else if (userType === "user" && token) {
+        const response = await api.get("/users/details-user");
+
+        if (response.data?.user?._id) {
+          setUser({
+            id: response.data.user._id,
+            isAdmin: response.data.user.isAdmin ?? false,
+            userType: "user"
+          });
+        } else {
+          unsetUser();
+        }
+      } else {
+        user.value = {
+          id: null,
+          isAdmin: false,
+          userType: null
+        };
+
+        localStorage.removeItem("userId");
+        localStorage.removeItem("isAdmin");
+        localStorage.removeItem("userType");
+      }
+    } catch (error) {
+      console.error("Token validation failed:", error);
+      unsetUser();
+    } finally {
+      bootstrapped.value = true;
+    }
+  }
+
+  return {
+    user,
+    bootstrapped,
+    isLoggedIn,
+    setUser,
+    unsetUser,
+    bootstrapAuth
+  };
 });

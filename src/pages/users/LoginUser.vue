@@ -1,13 +1,13 @@
 <template>
-  <div class="auth-page d-flex align-items-center">
+  <div class="auth-page py-5">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-5">
           <div class="card auth-card border-0 shadow-sm">
             <div class="card-body p-4 p-md-5">
               <div class="text-center mb-4">
-                <h2 class="fw-bold mb-2">User Login</h2>
-                <p class="text-muted mb-0">Sign in to access your profile.</p>
+                <h2 class="fw-bold mb-2">Login User</h2>
+                <p class="text-muted mb-0">Access your account securely.</p>
               </div>
 
               <form @submit.prevent="loginUser">
@@ -15,33 +15,41 @@
                   <label for="email" class="form-label">Email</label>
                   <input
                     id="email"
-                    v-model="form.email"
+                    v-model.trim="form.email"
                     type="email"
                     class="form-control"
-                    placeholder="Enter your email"
+                    placeholder="Enter email"
                     required
+                    autocomplete="email"
                   />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-2">
                   <label for="password" class="form-label">Password</label>
                   <input
                     id="password"
                     v-model="form.password"
                     type="password"
                     class="form-control"
-                    placeholder="Enter your password"
+                    placeholder="Enter password"
                     required
+                    autocomplete="current-password"
                   />
                 </div>
 
-                <div class="d-grid mt-4">
+                <div class="text-end mb-4">
+                  <router-link to="/forgot-password-user" class="forgot-link">
+                    Forgot Password?
+                  </router-link>
+                </div>
+
+                <div class="d-grid">
                   <button
                     type="submit"
                     class="btn btn-primary"
                     :disabled="loading"
                   >
-                    {{ loading ? "Signing in..." : "Login" }}
+                    {{ loading ? "Logging in..." : "Login" }}
                   </button>
                 </div>
               </form>
@@ -63,15 +71,14 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
+import api from "@/services/api";
 import { useUserStore } from "@/stores/user";
 
 const router = useRouter();
 const userStore = useUserStore();
 const notyf = new Notyf();
-
 const loading = ref(false);
 
 const form = reactive({
@@ -83,37 +90,39 @@ const loginUser = async () => {
   try {
     loading.value = true;
 
-    const response = await axios.post(
-      "http://localhost:4000/users/login-user",
-      {
-        email: form.email,
-        password: form.password
-      }
-    );
+    const response = await api.post("/users/login-user", {
+      email: form.email,
+      password: form.password
+    });
 
-    const { access, user } = response.data;
+    const token = response.data?.access;
 
-    localStorage.setItem("token", access);
-    localStorage.setItem("userType", user.userType || "user");
-
-    if (userStore.setUser) {
-      userStore.setUser({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        fullName: user.fullName,
-        email: user.email,
-        userType: user.userType,
-        isAdmin: user.isAdmin,
-        token: access
-      });
+    if (!token) {
+      throw new Error("No access token returned.");
     }
 
-    notyf.success(response.data.message || "Login successful.");
-    router.push("/my-userprofile");
+    localStorage.setItem("token", token);
+    localStorage.removeItem("professionalToken");
+    localStorage.setItem("userType", "user");
+
+    try {
+      const detailsResponse = await api.get("/users/details-user");
+      const user = detailsResponse.data?.user;
+
+      userStore.setUser({
+        id: user?._id || null,
+        isAdmin: user?.isAdmin ?? false,
+        userType: "user"
+      });
+    } catch (detailsError) {
+      console.error("Fetch details after login failed:", detailsError);
+    }
+
+    notyf.success(response.data?.message || "Logged in successfully.");
+    router.push("/");
   } catch (err) {
     console.error("Login user error:", err);
-    notyf.error(err.response?.data?.error || "Failed to login.");
+    notyf.error(err.response?.data?.error || err.message || "Failed to login user.");
   } finally {
     loading.value = false;
   }
@@ -123,7 +132,7 @@ const loginUser = async () => {
 <style scoped>
 .auth-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #1b1f24 0%, #111418 100%);
+  background-color: #f8f9fa;
 }
 
 .auth-card {
@@ -136,12 +145,13 @@ const loginUser = async () => {
 }
 
 .btn {
-  min-height: 46px;
+  min-height: 48px;
   border-radius: 12px;
   font-weight: 600;
 }
 
-.auth-link {
+.auth-link,
+.forgot-link {
   text-decoration: none;
   font-weight: 600;
 }

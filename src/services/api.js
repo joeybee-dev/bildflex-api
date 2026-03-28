@@ -17,6 +17,7 @@ api.interceptors.request.use(
         : localStorage.getItem("token");
 
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -28,9 +29,18 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    const status = error.response?.status;
+    const requestUrl = error.config?.url || "";
+
+    const isLoginRequest =
+      requestUrl.includes("/login-user") ||
+      requestUrl.includes("/login-prof");
+
+    if ((status === 401 || status === 403) && !isLoginRequest) {
       localStorage.removeItem("token");
       localStorage.removeItem("professionalToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("isAdmin");
       localStorage.removeItem("userType");
     }
 
