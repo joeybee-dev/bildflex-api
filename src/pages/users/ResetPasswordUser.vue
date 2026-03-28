@@ -87,7 +87,7 @@ const submitResetPassword = async () => {
 
     const token = route.params.token;
 
-    const response = await api.post(`/users/reset-password/${token}`, {
+    const response = await api.post(`/users/reset-password-user/${token}`, {
       password: form.password,
       confirmPassword: form.confirmPassword
     });

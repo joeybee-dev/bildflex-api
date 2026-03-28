@@ -71,12 +71,14 @@ const submitForgotPassword = async () => {
     loading.value = true;
     resetLink.value = "";
 
-    const response = await api.post("/users/forgot-password", {
+    const response = await api.post("/users/forgot-password-user", {
       email: email.value
     });
 
     resetLink.value = response.data?.resetLink || "";
-    notyf.success(response.data?.message || "Reset link generated.");
+    notyf.success(
+      response.data?.message || "If the email is registered, a reset link has been sent."
+    );
   } catch (err) {
     console.error("Forgot password error:", err);
     notyf.error(err.response?.data?.error || "Failed to process request.");
