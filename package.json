@@ -13,6 +13,7 @@
     "bootstrap": "4.6",
     "bootswatch": "^5.3.8",
     "crypto": "^1.0.1",
+    "dotenv": "^17.3.1",
     "nodemailer": "^8.0.4",
     "notyf": "^3.10.0",
     "pinia": "^3.0.4",
