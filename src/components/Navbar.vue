@@ -6,7 +6,9 @@ import { useUserStore } from "../stores/user";
 const userStore = useUserStore();
 
 const showAccountDropdown = ref(false);
-const dropdownRef = ref(null);
+const showServicesDropdown = ref(false);
+const accountDropdownRef = ref(null);
+const servicesDropdownRef = ref(null);
 const navCollapseRef = ref(null);
 
 const isLoggedIn = computed(() => !!userStore.user.id);
@@ -23,16 +25,23 @@ const logoutRoute = computed(() => {
   return isProfessional.value ? "/logout-prof" : "/logout-user";
 });
 
-const toggleDropdown = () => {
+const toggleAccountDropdown = () => {
   showAccountDropdown.value = !showAccountDropdown.value;
+  showServicesDropdown.value = false;
 };
 
-const closeDropdown = () => {
+const toggleServicesDropdown = () => {
+  showServicesDropdown.value = !showServicesDropdown.value;
   showAccountDropdown.value = false;
 };
 
+const closeDropdowns = () => {
+  showAccountDropdown.value = false;
+  showServicesDropdown.value = false;
+};
+
 const closeNavbarOnMobile = () => {
-  closeDropdown();
+  closeDropdowns();
 
   if (window.innerWidth < 992 && navCollapseRef.value) {
     const collapseInstance =
@@ -44,8 +53,18 @@ const closeNavbarOnMobile = () => {
 };
 
 const handleClickOutside = (event) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
-    closeDropdown();
+  const clickedOutsideAccount =
+    !accountDropdownRef.value || !accountDropdownRef.value.contains(event.target);
+
+  const clickedOutsideServices =
+    !servicesDropdownRef.value || !servicesDropdownRef.value.contains(event.target);
+
+  if (clickedOutsideAccount) {
+    showAccountDropdown.value = false;
+  }
+
+  if (clickedOutsideServices) {
+    showServicesDropdown.value = false;
   }
 };
 
@@ -84,7 +103,7 @@ onBeforeUnmount(() => {
         aria-controls="main-nav"
         aria-expanded="false"
         aria-label="Toggle navigation"
-        @click="closeDropdown"
+        @click="closeDropdowns"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -97,9 +116,68 @@ onBeforeUnmount(() => {
             </router-link>
           </li>
 
+          <li
+            ref="servicesDropdownRef"
+            class="nav-item dropdown services-dropdown w-100 w-lg-auto"
+          >
+            <button
+              type="button"
+              class="nav-link custom-nav-link dropdown-toggle-btn"
+              @click.stop="toggleServicesDropdown"
+            >
+              <span>Services</span>
+              <span class="ms-1">▾</span>
+            </button>
+
+            <ul
+              class="dropdown-menu custom-dropdown"
+              :class="{ show: showServicesDropdown }"
+            >
+              <li>
+                <router-link
+                  to="/services/handyman"
+                  class="dropdown-item"
+                  @click="closeNavbarOnMobile"
+                >
+                  Handyman
+                </router-link>
+              </li>
+
+              <li>
+                <router-link
+                  to="/services/designers"
+                  class="dropdown-item"
+                  @click="closeNavbarOnMobile"
+                >
+                  Designers
+                </router-link>
+              </li>
+
+              <li>
+                <router-link
+                  to="/services/contractors"
+                  class="dropdown-item"
+                  @click="closeNavbarOnMobile"
+                >
+                  Contractors
+                </router-link>
+              </li>
+
+              <li>
+                <router-link
+                  to="/services/suppliers"
+                  class="dropdown-item"
+                  @click="closeNavbarOnMobile"
+                >
+                  Suppliers
+                </router-link>
+              </li>
+            </ul>
+          </li>
+
           <li class="nav-item">
             <router-link to="/blogs" class="nav-link custom-nav-link" @click="closeNavbarOnMobile">
-              Blogs
+              Blog
             </router-link>
           </li>
 
@@ -110,13 +188,13 @@ onBeforeUnmount(() => {
           </li>
 
           <li
-            ref="dropdownRef"
+            ref="accountDropdownRef"
             class="nav-item dropdown login-dropdown w-100 w-lg-auto"
           >
             <button
               type="button"
               class="btn ms-lg-2 d-flex align-items-center justify-content-between account-btn"
-              @click.stop="toggleDropdown"
+              @click.stop="toggleAccountDropdown"
             >
               <span class="d-flex align-items-center">
                 <span class="material-symbols-outlined me-1">account_circle</span>
@@ -219,7 +297,8 @@ onBeforeUnmount(() => {
   text-decoration: none;
 }
 
-.login-dropdown {
+.login-dropdown,
+.services-dropdown {
   position: relative;
 }
 
@@ -261,6 +340,13 @@ onBeforeUnmount(() => {
 .custom-nav-link:hover::after,
 .custom-nav-link.router-link-active::after {
   transform: scaleX(1);
+}
+
+.dropdown-toggle-btn {
+  background: transparent;
+  border: none;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .account-btn {
@@ -331,7 +417,13 @@ onBeforeUnmount(() => {
     padding-right: 0;
   }
 
-  .login-dropdown {
+  .dropdown-toggle-btn {
+    width: 100%;
+    text-align: left;
+  }
+
+  .login-dropdown,
+  .services-dropdown {
     margin-top: 0.5rem;
   }
 

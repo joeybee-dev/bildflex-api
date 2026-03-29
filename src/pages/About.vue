@@ -1,19 +1,12 @@
 <template>
   <section class="about-page py-4 py-md-5">
     <div class="container">
-      <div class="page-header mb-4">
-        <h2 class="page-title mb-1">About Us</h2>
-        <p class="page-subtitle mb-0">
-          Learn more about bildflex and our mission to connect people with trusted construction professionals.
-        </p>
-      </div>
+      <div class="page-header mb-2">
+        <h2 class="page-title mb-1 ms-3">About Us</h2>
 
-      <div class="about-card shadow-sm">
-        <div class="about-card-header"></div>
-
-        <div class="about-card-body p-4 p-md-5">
+        <div class="about-card-body p-3 p-md-5">
           <div class="row justify-content-center">
-            <div class="col-12 col-lg-10">
+            <div class="col-12 col-lg-11">
               <p class="about-text">
                 Bildflex is a trusted construction network built to connect clients with reliable handymen, designers, contractors, and suppliers in one convenient platform. Our goal is to make it easier for homeowners, businesses, and project owners to find the right professionals for residential, commercial, and industrial needs. We believe that every project deserves skilled people, dependable service, and strong collaboration from start to finish.
               </p>
@@ -28,7 +21,9 @@
             </div>
           </div>
         </div>
+
       </div>
+
     </div>
   </section>
 </template>

@@ -69,8 +69,8 @@ const year = new Date().getFullYear();
           <h6 class="footer-heading">Contact</h6>
           <ul class="footer-contact list-unstyled mb-0">
             <li>Email: support@bildflex.com</li>
-            <li>Phone: +63 912 345 6789</li>
-            <li>Location: Quezon City, Philippines</li>
+            <!-- <li>Phone: +63 912 345 6789</li> -->
+            <!-- <li>Location: Quezon City, Philippines</li> -->
           </ul>
         </div>
       </div>

@@ -6,125 +6,126 @@
         <p class="page-subtitle mb-0">
           Share your comments, suggestions, or concerns with us.
         </p>
-      </div>
 
-      <div class="card feedback-card border-0 shadow-sm overflow-hidden">
-        <div class="feedback-header"></div>
 
-        <div class="card-body p-3 p-sm-4 p-md-5">
-          <form @submit.prevent="submitFeedback">
-            <div class="row g-3">
-              <div class="col-12 col-md-6">
-                <label for="name" class="form-label">Full Name</label>
-                <input
-                  id="name"
-                  v-model="form.name"
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter your full name"
-                  required
-                />
+          <div class="card-body p-2 p-sm-4 p-md-5 mb-2">
+            <form @submit.prevent="submitFeedback">
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label for="name" class="form-label">Full Name</label>
+                  <input
+                    id="name"
+                    v-model="form.name"
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label for="email" class="form-label">Email</label>
+                  <input
+                    id="email"
+                    v-model="form.email"
+                    type="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label for="category" class="form-label">Category</label>
+                  <select
+                    id="category"
+                    v-model="form.category"
+                    class="form-select"
+                    required
+                  >
+                    <option disabled value="">Select category</option>
+                    <option value="General">General</option>
+                    <option value="Suggestion">Suggestion</option>
+                    <option value="Bug Report">Bug Report</option>
+                    <option value="Complaint">Complaint</option>
+                    <option value="Service Provider">Service Provider</option>
+                  </select>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label for="rating" class="form-label">Rating</label>
+                  <select
+                    id="rating"
+                    v-model="form.rating"
+                    class="form-select"
+                    required
+                  >
+                    <option disabled value="">Select rating</option>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="3">3 - Good</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="1">1 - Poor</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label for="subject" class="form-label">Subject</label>
+                  <input
+                    id="subject"
+                    v-model="form.subject"
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter feedback subject"
+                    required
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label for="message" class="form-label">Message</label>
+                  <textarea
+                    id="message"
+                    v-model="form.message"
+                    class="form-control message-textarea"
+                    rows="6"
+                    placeholder="Write your feedback here"
+                    required
+                  ></textarea>
+                </div>
               </div>
 
-              <div class="col-12 col-md-6">
-                <label for="email" class="form-label">Email</label>
-                <input
-                  id="email"
-                  v-model="form.email"
-                  type="email"
-                  class="form-control"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label for="category" class="form-label">Category</label>
-                <select
-                  id="category"
-                  v-model="form.category"
-                  class="form-select"
-                  required
+              <div class="d-grid d-md-flex justify-content-md-end gap-2 mt-4">
+                <button
+                  type="button"
+                  class="btn action-btn-secondary"
+                  @click="resetForm"
                 >
-                  <option disabled value="">Select category</option>
-                  <option value="General">General</option>
-                  <option value="Suggestion">Suggestion</option>
-                  <option value="Bug Report">Bug Report</option>
-                  <option value="Complaint">Complaint</option>
-                  <option value="Service Provider">Service Provider</option>
-                </select>
-              </div>
+                  Clear
+                </button>
 
-              <div class="col-12 col-md-6">
-                <label for="rating" class="form-label">Rating</label>
-                <select
-                  id="rating"
-                  v-model="form.rating"
-                  class="form-select"
-                  required
+                <button
+                  type="submit"
+                  class="btn action-btn-primary"
+                  :disabled="loading"
                 >
-                  <option disabled value="">Select rating</option>
-                  <option value="5">5 - Excellent</option>
-                  <option value="4">4 - Very Good</option>
-                  <option value="3">3 - Good</option>
-                  <option value="2">2 - Fair</option>
-                  <option value="1">1 - Poor</option>
-                </select>
+                  {{ loading ? "Submitting..." : "Submit" }}
+                </button>
               </div>
+            </form>
 
-              <div class="col-12">
-                <label for="subject" class="form-label">Subject</label>
-                <input
-                  id="subject"
-                  v-model="form.subject"
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter feedback subject"
-                  required
-                />
-              </div>
-
-              <div class="col-12">
-                <label for="message" class="form-label">Message</label>
-                <textarea
-                  id="message"
-                  v-model="form.message"
-                  class="form-control message-textarea"
-                  rows="6"
-                  placeholder="Write your feedback here"
-                  required
-                ></textarea>
-              </div>
+            <div v-if="successMessage" class="success-box shadow-sm mt-4">
+              {{ successMessage }}
             </div>
 
-            <div class="d-grid d-md-flex justify-content-md-end gap-2 mt-4">
-              <button
-                type="button"
-                class="btn action-btn-secondary"
-                @click="resetForm"
-              >
-                Clear
-              </button>
-
-              <button
-                type="submit"
-                class="btn action-btn-primary"
-                :disabled="loading"
-              >
-                {{ loading ? "Submitting..." : "Submit" }}
-              </button>
+            <div v-if="errorMessage" class="error-box shadow-sm mt-4">
+              {{ errorMessage }}
             </div>
-          </form>
-
-          <div v-if="successMessage" class="success-box shadow-sm mt-4">
-            {{ successMessage }}
           </div>
+   
 
-          <div v-if="errorMessage" class="error-box shadow-sm mt-4">
-            {{ errorMessage }}
-          </div>
-        </div>
       </div>
+
+     
     </div>
   </div>
 </template>

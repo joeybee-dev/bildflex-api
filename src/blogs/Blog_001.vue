@@ -2,7 +2,7 @@
   <section class="blog-page py-4 py-md-5">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-11">
           <article class="blog-card shadow-sm">
             <!-- <div class="blog-card-header"></div> -->
 
