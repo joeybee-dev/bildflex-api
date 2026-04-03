@@ -1,5 +1,4 @@
-Server:
-https://bildflex-server.onrender.com
+Author: Joey Q. Aquino
 
 
 
