@@ -7,22 +7,83 @@ const userStore = useUserStore();
 
 const showAccountDropdown = ref(false);
 const showServicesDropdown = ref(false);
+
 const accountDropdownRef = ref(null);
 const servicesDropdownRef = ref(null);
 const navCollapseRef = ref(null);
 
-const isLoggedIn = computed(() => !!userStore.user.id);
-const isProfessional = computed(() => userStore.user.userType === "professional");
+const isLoggedIn = computed(() => !!userStore.user?.id);
+const userType = computed(() => userStore.user?.userType || "user");
+const isAdmin = computed(() => !!userStore.user?.isAdmin);
 
 const profileRoute = computed(() => {
-  if (isProfessional.value && userStore.user.id) {
-    return `/myprofessionalprofile/${userStore.user.id}`;
+  if (!isLoggedIn.value) return "/profile";
+
+  switch (userType.value) {
+    case "designer":
+      return "/details-designer";
+    case "handyman":
+      return "/details-handyman";
+    case "contractor":
+      return "/details-contractor";
+    case "supplier":
+      return "/supplier/profile";
+    default:
+      return "/profile";
   }
-  return "/details-user";
 });
 
-const logoutRoute = computed(() => {
-  return isProfessional.value ? "/logout-prof" : "/logout-user";
+/*const logoutRoute = computed(() => {
+  switch (userType.value) {
+    case "designer":
+      return "/logout-designer";
+    case "handyman":
+      return "/logout-handyman";
+    case "contractor":
+      return "/logout-contractor";
+    case "supplier":
+      return "/logout-supplier";
+    default:
+      return "/logout-user";
+  }
+});*/
+
+const logoutRoute = computed(() => "/logout");
+
+const dashboardRoute = computed(() => {
+  if (!isAdmin.value) return null;
+
+  switch (userType.value) {
+    case "designer":
+      return "/admin/designers";
+    case "handyman":
+      return "/admin/handymen";
+    case "contractor":
+      return "/admin/contractors";
+    case "supplier":
+      return "/admin/suppliers";
+    default:
+      return "/all-users";
+  }
+});
+
+const accountLabel = computed(() => {
+  if (!isLoggedIn.value) return;
+
+  switch (userType.value) {
+    case "user":
+      return "User";
+    case "designer":
+      return "Designer";
+    case "handyman":
+      return "Handyman";
+    case "contractor":
+      return "Contractor";
+    case "supplier":
+      return "Supplier";
+    default:
+      return "Account";
+  }
 });
 
 const toggleAccountDropdown = () => {
@@ -59,13 +120,8 @@ const handleClickOutside = (event) => {
   const clickedOutsideServices =
     !servicesDropdownRef.value || !servicesDropdownRef.value.contains(event.target);
 
-  if (clickedOutsideAccount) {
-    showAccountDropdown.value = false;
-  }
-
-  if (clickedOutsideServices) {
-    showServicesDropdown.value = false;
-  }
+  if (clickedOutsideAccount) showAccountDropdown.value = false;
+  if (clickedOutsideServices) showServicesDropdown.value = false;
 };
 
 onMounted(() => {
@@ -109,9 +165,15 @@ onBeforeUnmount(() => {
       </button>
 
       <div ref="navCollapseRef" class="collapse navbar-collapse" id="main-nav">
-        <ul class="navbar-nav ms-auto align-items-start align-items-lg-center gap-lg-2 nav-list">
+        <ul
+          class="navbar-nav ms-auto align-items-start align-items-lg-center gap-lg-2 nav-list"
+        >
           <li class="nav-item">
-            <router-link to="/about" class="nav-link custom-nav-link" @click="closeNavbarOnMobile">
+            <router-link
+              to="/about"
+              class="nav-link custom-nav-link"
+              @click="closeNavbarOnMobile"
+            >
               About
             </router-link>
           </li>
@@ -176,13 +238,21 @@ onBeforeUnmount(() => {
           </li>
 
           <li class="nav-item">
-            <router-link to="/blogs" class="nav-link custom-nav-link" @click="closeNavbarOnMobile">
+            <router-link
+              to="/blogs"
+              class="nav-link custom-nav-link"
+              @click="closeNavbarOnMobile"
+            >
               Blog
             </router-link>
           </li>
 
           <li class="nav-item">
-            <router-link to="/feedback" class="nav-link custom-nav-link" @click="closeNavbarOnMobile">
+            <router-link
+              to="/feedback"
+              class="nav-link custom-nav-link"
+              @click="closeNavbarOnMobile"
+            >
               Support
             </router-link>
           </li>
@@ -198,7 +268,7 @@ onBeforeUnmount(() => {
             >
               <span class="d-flex align-items-center">
                 <span class="material-symbols-outlined me-1">account_circle</span>
-                <span>{{ isLoggedIn ? "Account" : "Login" }}</span>
+                <span>{{ accountLabel }}</span>
               </span>
               <span class="ms-2">▾</span>
             </button>
@@ -210,33 +280,50 @@ onBeforeUnmount(() => {
               <template v-if="!isLoggedIn">
                 <li>
                   <router-link
-                    to="/login-user"
+                    to="/login"
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
                     Login as User
                   </router-link>
                 </li>
-
                 <li>
                   <router-link
-                    to="/login-prof"
+                    to="/login"
+                    class="dropdown-item"
+                    @click="closeNavbarOnMobile"
+                  >
+                    Login as Handyman
+                  </router-link>
+                </li>
+                <li>
+                  <router-link
+                    to="/login"
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
                     Login as Designer
                   </router-link>
                 </li>
-
                 <li>
-                  <button
-                    type="button"
+                  <router-link
+                    to="/login"
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Login as Handyman
-                  </button>
+                    Login as Contractor
+                  </router-link>
                 </li>
+                <li>
+                  <router-link
+                    to="/supplier/login"
+                    class="dropdown-item"
+                    @click="closeNavbarOnMobile"
+                  >
+                    Login as Supplier
+                  </router-link>
+                </li>
+
               </template>
 
               <template v-else>
@@ -250,13 +337,13 @@ onBeforeUnmount(() => {
                   </router-link>
                 </li>
 
-                <li v-if="userStore.user.isAdmin && userStore.user.userType === 'user'">
+                <li v-if="dashboardRoute">
                   <router-link
-                    to="/all-users"
+                    :to="dashboardRoute"
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Manage Users
+                    Admin Dashboard
                   </router-link>
                 </li>
 
@@ -366,7 +453,7 @@ onBeforeUnmount(() => {
 }
 
 .custom-dropdown {
-  min-width: 220px;
+  min-width: 240px;
   margin-top: 0.45rem;
   border-radius: 12px;
   border: 1px solid rgba(0, 62, 134, 0.1);

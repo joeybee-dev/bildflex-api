@@ -5,19 +5,32 @@ import api from "@/services/api";
 export const useUserStore = defineStore("user", () => {
   const user = ref({
     id: localStorage.getItem("userId") || null,
+    firstName: localStorage.getItem("firstName") || "",
+    lastName: localStorage.getItem("lastName") || "",
+    email: localStorage.getItem("email") || "",
     isAdmin: localStorage.getItem("isAdmin") === "true",
     userType: localStorage.getItem("userType") || null
   });
 
   const bootstrapped = ref(false);
+  const loading = ref(false);
 
   const isLoggedIn = computed(() => !!user.value.id);
+  const fullName = computed(() =>
+    `${user.value.firstName || ""} ${user.value.lastName || ""}`.trim()
+  );
 
-  function setUser(userData) {
+  function setUser(userData = {}) {
     user.value = {
-      id: userData.id || null,
-      isAdmin: userData.isAdmin ?? false,
-      userType: userData.userType || null
+      id: userData._id || userData.id || null,
+      firstName: userData.firstName || "",
+      lastName: userData.lastName || "",
+      email: userData.email || "",
+      isAdmin:
+        typeof userData.isAdmin === "boolean"
+          ? userData.isAdmin
+          : userData.userType === "admin",
+      userType: userData.userType || "user"
     };
 
     if (user.value.id) {
@@ -26,6 +39,9 @@ export const useUserStore = defineStore("user", () => {
       localStorage.removeItem("userId");
     }
 
+    localStorage.setItem("firstName", user.value.firstName || "");
+    localStorage.setItem("lastName", user.value.lastName || "");
+    localStorage.setItem("email", user.value.email || "");
     localStorage.setItem("isAdmin", String(user.value.isAdmin));
 
     if (user.value.userType) {
@@ -38,74 +54,118 @@ export const useUserStore = defineStore("user", () => {
   function unsetUser() {
     user.value = {
       id: null,
+      firstName: "",
+      lastName: "",
+      email: "",
       isAdmin: false,
       userType: null
     };
 
     localStorage.removeItem("token");
-    localStorage.removeItem("professionalToken");
+    localStorage.removeItem("designerToken");
+    localStorage.removeItem("handymanToken");
+    localStorage.removeItem("contractorToken");
+    localStorage.removeItem("supplierToken");
     localStorage.removeItem("userId");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+    localStorage.removeItem("email");
     localStorage.removeItem("isAdmin");
     localStorage.removeItem("userType");
   }
 
   async function bootstrapAuth() {
     bootstrapped.value = false;
+    loading.value = true;
 
-    const token = localStorage.getItem("token");
-    const professionalToken = localStorage.getItem("professionalToken");
     const userType = localStorage.getItem("userType");
+    const token = localStorage.getItem("token");
+    const designerToken = localStorage.getItem("designerToken");
+    const handymanToken = localStorage.getItem("handymanToken");
+    const contractorToken = localStorage.getItem("contractorToken");
+    const supplierToken = localStorage.getItem("supplierToken");
 
     try {
-      if (userType === "professional" && professionalToken) {
-        const response = await api.get("/professionals/my/profile");
-
-        if (response.data?.profile?._id) {
+      if (userType === "designer" && designerToken) {
+        const response = await api.get("/designers/details");
+        if (response.data?.designer?._id) {
           setUser({
-            id: response.data.profile._id,
-            isAdmin: false,
-            userType: "professional"
+            ...response.data.designer,
+            userType: "designer",
+            isAdmin: false
           });
         } else {
           unsetUser();
         }
-      } else if (userType === "user" && token) {
-        const response = await api.get("/users/details-user");
-
+      } else if (userType === "handyman" && handymanToken) {
+        const response = await api.get("/handymen/details");
+        if (response.data?.handyman?._id) {
+          setUser({
+            ...response.data.handyman,
+            userType: "handyman",
+            isAdmin: false
+          });
+        } else {
+          unsetUser();
+        }
+      } else if (userType === "contractor" && contractorToken) {
+        const response = await api.get("/contractors/details");
+        if (response.data?.contractor?._id) {
+          setUser({
+            ...response.data.contractor,
+            userType: "contractor",
+            isAdmin: false
+          });
+        } else {
+          unsetUser();
+        }
+      } else if (userType === "supplier" && supplierToken) {
+        const response = await api.get("/suppliers/details");
+        if (response.data?.supplier?._id) {
+          setUser({
+            ...response.data.supplier,
+            userType: "supplier",
+            isAdmin: false
+          });
+        } else {
+          unsetUser();
+        }
+      } else if ((userType === "user" || !userType) && token) {
+        const response = await api.get("/users/details");
         if (response.data?.user?._id) {
           setUser({
-            id: response.data.user._id,
-            isAdmin: response.data.user.isAdmin ?? false,
-            userType: "user"
+            ...response.data.user,
+            userType: response.data.user.userType || "user",
+            isAdmin: response.data.user.userType === "admin"
           });
         } else {
           unsetUser();
         }
       } else {
-        user.value = {
-          id: null,
-          isAdmin: false,
-          userType: null
-        };
-
-        localStorage.removeItem("userId");
-        localStorage.removeItem("isAdmin");
-        localStorage.removeItem("userType");
+        unsetUser();
       }
     } catch (error) {
-      console.error("Token validation failed:", error);
+      console.error("Bootstrap auth failed:", error);
       unsetUser();
     } finally {
       bootstrapped.value = true;
+      loading.value = false;
     }
+  }
+
+  function logout() {
+    unsetUser();
   }
 
   return {
     user,
     bootstrapped,
+    loading,
     isLoggedIn,
+    fullName,
     setUser,
     unsetUser,
-    bootstrapAuth
+    bootstrapAuth,
+    logout
   };
 });

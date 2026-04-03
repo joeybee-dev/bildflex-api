@@ -2,51 +2,65 @@
   <div class="auth-page py-5">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-5">
+        <div class="col-12 col-md-9 col-lg-6">
           <div class="card auth-card border-0 shadow-sm">
             <div class="auth-header text-center">
               <h2 class="auth-title mb-2">Reset Password</h2>
               <p class="auth-subtitle mb-0">
-                Enter your new password to update your account access.
+                Enter your new password to reset your account access.
               </p>
             </div>
 
             <div class="card-body p-4 p-md-5">
               <form @submit.prevent="submitResetPassword">
-                <div class="mb-3">
-                  <label for="password" class="form-label">New Password</label>
-                  <input
-                    id="password"
-                    v-model="password"
-                    type="password"
-                    class="form-control"
-                    placeholder="Enter new password"
-                    required
-                  />
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="password" class="form-label">New Password</label>
+                    <input
+                      id="password"
+                      v-model="form.password"
+                      type="password"
+                      class="form-control"
+                      placeholder="Enter new password"
+                      required
+                      minlength="8"
+                      autocomplete="new-password"
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input
+                      id="confirmPassword"
+                      v-model="form.confirmPassword"
+                      type="password"
+                      class="form-control"
+                      placeholder="Confirm new password"
+                      required
+                      minlength="8"
+                      autocomplete="new-password"
+                    />
+                  </div>
                 </div>
 
-                <div class="mb-4">
-                  <label for="confirmPassword" class="form-label">Confirm Password</label>
-                  <input
-                    id="confirmPassword"
-                    v-model="confirmPassword"
-                    type="password"
-                    class="form-control"
-                    placeholder="Confirm new password"
-                    required
-                  />
-                </div>
-
-                <div class="d-grid">
+                <div class="d-grid mt-4">
                   <button
                     type="submit"
-                    class="btn submit-btn"
+                    class="btn auth-btn"
                     :disabled="loading"
                   >
-                    {{ loading ? "Updating..." : "Reset Password" }}
+                    {{ loading ? "Resetting..." : "Reset Password" }}
                   </button>
                 </div>
               </form>
+
+              <div
+                v-if="errorMessage"
+                class="alert alert-danger mt-4 mb-0"
+                role="alert"
+              >
+                {{ errorMessage }}
+              </div>
 
               <p class="text-center auth-footer-text mt-4 mb-0">
                 Back to
@@ -63,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
@@ -74,29 +88,42 @@ const router = useRouter();
 const notyf = new Notyf();
 
 const loading = ref(false);
-const password = ref("");
-const confirmPassword = ref("");
+const errorMessage = ref("");
+
+const form = reactive({
+  password: "",
+  confirmPassword: ""
+});
 
 const submitResetPassword = async () => {
-  try {
-    if (password.value !== confirmPassword.value) {
-      notyf.error("Passwords do not match.");
-      return;
-    }
+  errorMessage.value = "";
 
+  if (form.password !== form.confirmPassword) {
+    errorMessage.value = "Passwords do not match.";
+    notyf.error(errorMessage.value);
+    return;
+  }
+
+  try {
     loading.value = true;
 
-    const token = route.params.token || route.query.token;
-
-    const response = await api.post(`/users/reset-password-user/${token}`, {
-      password: password.value
+    const response = await api.post(`/users/reset-password/${route.params.token}`, {
+      password: form.password,
+      confirmPassword: form.confirmPassword
     });
 
-    notyf.success(response.data?.message || "Password reset successfully.");
+    notyf.success(
+      response.data?.message || "Password reset successful."
+    );
+
     router.push("/login-user");
   } catch (err) {
     console.error("Reset password error:", err);
-    notyf.error(err.response?.data?.error || "Failed to reset password.");
+    errorMessage.value =
+      err.response?.data?.error ||
+      err.response?.data?.message ||
+      "Failed to reset password.";
+    notyf.error(errorMessage.value);
   } finally {
     loading.value = false;
   }
@@ -158,7 +185,7 @@ const submitResetPassword = async () => {
   color: #9aa4b2;
 }
 
-.submit-btn {
+.auth-btn {
   min-height: 50px;
   border-radius: 12px;
   font-weight: 700;
@@ -168,13 +195,13 @@ const submitResetPassword = async () => {
   transition: all 0.25s ease;
 }
 
-.submit-btn:hover:not(:disabled) {
+.auth-btn:hover:not(:disabled) {
   background-color: #ffc107;
   color: #003e86;
   border-color: #ffc107;
 }
 
-.submit-btn:disabled {
+.auth-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
@@ -192,6 +219,10 @@ const submitResetPassword = async () => {
 
 .auth-footer-text {
   color: #6c757d;
+}
+
+.alert {
+  border-radius: 12px;
 }
 
 @media (max-width: 767.98px) {

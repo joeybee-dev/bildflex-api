@@ -5,12 +5,14 @@
         <div class="col-12 col-md-8 col-lg-5">
           <div class="card auth-card border-0 shadow-sm">
             <div class="auth-header text-center">
-              <h2 class="auth-title mb-2">Login User</h2>
-              <p class="auth-subtitle mb-0">Access your account securely.</p>
+              <h2 class="auth-title mb-2">Login Handyman</h2>
+              <p class="auth-subtitle mb-0">
+                Access your handyman account securely.
+              </p>
             </div>
 
             <div class="card-body p-4 p-md-5">
-              <form @submit.prevent="loginUser">
+              <form @submit.prevent="loginHandyman">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
                   <input
@@ -18,28 +20,28 @@
                     v-model.trim="form.email"
                     type="email"
                     class="form-control"
-                    placeholder="Enter email"
+                    placeholder="Enter your email"
                     required
                     autocomplete="email"
                   />
                 </div>
 
-                <div class="mb-2">
+                <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
                   <input
                     id="password"
                     v-model="form.password"
                     type="password"
                     class="form-control"
-                    placeholder="Enter password"
+                    placeholder="Enter your password"
                     required
                     autocomplete="current-password"
                   />
                 </div>
 
-                <div class="text-end mb-4">
-                  <router-link to="/forgot-password" class="forgot-link">
-                    Forgot Password?
+                <div class="d-flex justify-content-end mb-4">
+                  <router-link to="/forgot-password-handyman" class="auth-link">
+                    Forgot password?
                   </router-link>
                 </div>
 
@@ -55,8 +57,8 @@
               </form>
 
               <p class="text-center auth-footer-text mt-4 mb-0">
-                No account yet?
-                <router-link to="/register" class="auth-link">
+                Don’t have an account?
+                <router-link to="/register-handyman" class="auth-link">
                   Register here
                 </router-link>
               </p>
@@ -74,11 +76,13 @@ import { useRouter } from "vue-router";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
 import api from "@/services/api";
-import { useUserStore } from "@/stores/user";
 
 const router = useRouter();
-const userStore = useUserStore();
-const notyf = new Notyf();
+const notyf = new Notyf({
+  duration: 3000,
+  position: { x: "right", y: "top" }
+});
+
 const loading = ref(false);
 
 const form = reactive({
@@ -86,58 +90,36 @@ const form = reactive({
   password: ""
 });
 
-const loginUser = async () => {
+const loginHandyman = async () => {
   try {
     loading.value = true;
 
-    const response = await api.post("/users/login", {
+    const response = await api.post("/handymen/login-handyman", {
       email: form.email,
       password: form.password
     });
 
     const token = response.data?.access;
-    const user = response.data?.user;
+    const handyman = response.data?.handyman;
 
     if (!token) {
-      throw new Error("No access token returned.");
+      notyf.error("No access token received.");
+      return;
     }
 
-    localStorage.setItem("token", token);
-    localStorage.setItem("userType", "user");
+    localStorage.setItem("handymanToken", token);
+    localStorage.setItem("userType", "handyman");
 
-    if (user) {
-      userStore.setUser({
-        id: user._id || null,
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.email || "",
-        userType: user.userType || "user",
-        isAdmin: user.userType === "admin"
-      });
-    } else {
-      try {
-        const detailsResponse = await api.get("/users/profile");
-        const details = detailsResponse.data?.user;
-
-        userStore.setUser({
-          id: details?._id || null,
-          firstName: details?.firstName || "",
-          lastName: details?.lastName || "",
-          email: details?.email || "",
-          userType: details?.userType || "user",
-          isAdmin: details?.userType === "admin"
-        });
-      } catch (detailsError) {
-        console.error("Fetch details after login failed:", detailsError);
-      }
+    if (handyman) {
+      localStorage.setItem("handymanData", JSON.stringify(handyman));
     }
 
-    notyf.success("Logged in successfully.");
-    router.push("/");
-  } catch (err) {
-    console.error("Login user error:", err);
+    notyf.success(response.data?.message || "Login successful.");
+    router.push("/edit-handyman");
+  } catch (error) {
+    console.error("Login handyman error:", error);
     notyf.error(
-      err.response?.data?.error || err.message || "Failed to login user."
+      error.response?.data?.error || "Failed to login handyman."
     );
   } finally {
     loading.value = false;
@@ -161,19 +143,19 @@ const loginUser = async () => {
 }
 
 .auth-header {
-  /*background-color: #003e86;*/
+  background-color: #003e86;
   border-bottom: 3px solid #ffc107;
   padding: 2rem 1.5rem 1.75rem;
 }
 
 .auth-title {
-  color: #003e86;
+  color: #ffc107;
   font-weight: 800;
   letter-spacing: 0.3px;
 }
 
 .auth-subtitle {
-  color: #003e86;
+  color: #f4f6f8;
   font-size: 0.95rem;
 }
 
@@ -221,16 +203,14 @@ const loginUser = async () => {
   cursor: not-allowed;
 }
 
-.auth-link,
-.forgot-link {
+.auth-link {
   color: #003e86;
   text-decoration: none;
   font-weight: 700;
   transition: color 0.25s ease;
 }
 
-.auth-link:hover,
-.forgot-link:hover {
+.auth-link:hover {
   color: #ffc107;
 }
 

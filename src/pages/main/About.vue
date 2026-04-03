@@ -2,9 +2,9 @@
   <section class="about-page py-4 py-md-5">
     <div class="container">
       <div class="page-header mb-2">
-        <h2 class="page-title mb-1 ms-3">About Us</h2>
+        <h2 class="page-title mt-3 text-center">About Us</h2>
 
-        <div class="about-card-body p-3 p-md-5">
+        <div class="about-card-body px-3 mt-1 p-md-3">
           <div class="row justify-content-center">
             <div class="col-12 col-lg-11">
               <p class="about-text">

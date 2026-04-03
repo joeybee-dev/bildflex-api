@@ -2,22 +2,23 @@
   <div class="auth-page py-5">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-6">
+        <div class="col-12 col-md-9 col-lg-7">
           <div class="card auth-card border-0 shadow-sm">
             <div class="auth-header text-center">
-              <h2 class="auth-title mb-2">Create User Account</h2>
+              <h2 class="auth-title mb-2">Register User</h2>
               <p class="auth-subtitle mb-0">
-                Join bildflex and connect with trusted construction experts.
+                Create your account and start connecting with trusted construction experts.
               </p>
             </div>
 
             <div class="card-body p-4 p-md-5">
               <form @submit.prevent="registerUser">
                 <div class="row g-3">
-                  <div class="col-12">
-                    <label class="form-label">First Name</label>
+                  <div class="col-12 col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
                     <input
-                      v-model="form.firstName"
+                      id="firstName"
+                      v-model.trim="form.firstName"
                       type="text"
                       class="form-control"
                       placeholder="Enter first name"
@@ -25,32 +26,40 @@
                     />
                   </div>
 
-                  <div class="col-12">
-                    <label class="form-label">Gender</label>
-                    <select v-model="form.gender" class="form-select" required>
+                  <div class="col-12 col-md-6">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select
+                      id="gender"
+                      v-model="form.gender"
+                      class="form-select"
+                      required
+                    >
                       <option disabled value="">Select gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Prefer not to say">Prefer not to say</option>
-                      <option value="Other">Other</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Other</option>
+                      <option>Prefer not to say</option>
                     </select>
                   </div>
 
-                  <div class="col-12">
-                    <label class="form-label">Email</label>
+                  <div class="col-12 col-md-6">
+                    <label for="email" class="form-label">Email</label>
                     <input
-                      v-model="form.email"
+                      id="email"
+                      v-model.trim="form.email"
                       type="email"
                       class="form-control"
                       placeholder="Enter email"
                       required
+                      autocomplete="email"
                     />
                   </div>
 
                   <div class="col-12 col-md-6">
-                    <label class="form-label">City</label>
+                    <label for="city" class="form-label">City</label>
                     <input
-                      v-model="form.city"
+                      id="city"
+                      v-model.trim="form.city"
                       type="text"
                       class="form-control"
                       placeholder="Enter city"
@@ -59,34 +68,30 @@
                   </div>
 
                   <div class="col-12 col-md-6">
-                    <label class="form-label">Country</label>
+                    <label for="password" class="form-label">Password</label>
                     <input
-                      v-model="form.country"
-                      type="text"
-                      class="form-control"
-                      placeholder="Enter country"
-                    />
-                  </div>
-
-                  <div class="col-12">
-                    <label class="form-label">Password</label>
-                    <input
+                      id="password"
                       v-model="form.password"
                       type="password"
                       class="form-control"
                       placeholder="Enter password"
                       required
+                      minlength="8"
+                      autocomplete="new-password"
                     />
                   </div>
 
-                  <div class="col-12">
-                    <label class="form-label">Confirm Password</label>
+                  <div class="col-12 col-md-6">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
                     <input
-                      v-model="confirmPassword"
+                      id="confirmPassword"
+                      v-model="form.confirmPassword"
                       type="password"
                       class="form-control"
                       placeholder="Confirm password"
                       required
+                      minlength="8"
+                      autocomplete="new-password"
                     />
                   </div>
                 </div>
@@ -94,17 +99,17 @@
                 <div class="d-grid mt-4">
                   <button
                     type="submit"
-                    class="btn register-btn"
+                    class="btn auth-btn"
                     :disabled="loading"
                   >
-                    {{ loading ? "Creating account..." : "Register" }}
+                    {{ loading ? "Registering..." : "Register" }}
                   </button>
                 </div>
               </form>
 
               <p class="text-center auth-footer-text mt-4 mb-0">
                 Already have an account?
-                <router-link to="/login-user" class="auth-link">
+                <router-link to="/login" class="auth-link">
                   Login here
                 </router-link>
               </p>
@@ -126,20 +131,26 @@ import api from "@/services/api";
 const router = useRouter();
 const notyf = new Notyf();
 const loading = ref(false);
-const confirmPassword = ref("");
+const currentYear = new Date().getFullYear();
 
 const form = reactive({
   firstName: "",
+  lastName: "",
   gender: "",
+  birthYear: "",
   email: "",
+  mobileNumber: "",
   city: "",
+  province: "",
   country: "Philippines",
-  password: ""
+  aboutMe: "",
+  password: "",
+  confirmPassword: ""
 });
 
 const registerUser = async () => {
   try {
-    if (form.password !== confirmPassword.value) {
+    if (form.password !== form.confirmPassword) {
       notyf.error("Passwords do not match.");
       return;
     }
@@ -148,21 +159,27 @@ const registerUser = async () => {
 
     const payload = {
       firstName: form.firstName,
+      lastName: form.lastName,
       gender: form.gender,
+      birthYear: form.birthYear || undefined,
       email: form.email,
+      mobileNumber: form.mobileNumber,
       city: form.city,
+      province: form.province,
       country: form.country || "Philippines",
+      aboutMe: form.aboutMe,
       password: form.password
     };
 
-    const response = await api.post("/users/register-user", payload);
+    const response = await api.post("/users/register", payload);
 
-    notyf.success(response.data.message || "User registered successfully.");
-    router.push("/login-user");
+    notyf.success(response.data?.message || "User registered successfully.");
+    router.push("/login");
   } catch (err) {
     console.error("Register user error:", err);
-    console.error("Register user response:", err.response?.data);
-    notyf.error(err.response?.data?.error || "Failed to register user.");
+    notyf.error(
+      err.response?.data?.error || err.message || "Failed to register user."
+    );
   } finally {
     loading.value = false;
   }
@@ -185,19 +202,19 @@ const registerUser = async () => {
 }
 
 .auth-header {
-  background-color: #003e86;
+  /*background-color: #003e86;*/
   border-bottom: 3px solid #ffc107;
   padding: 2rem 1.5rem 1.75rem;
 }
 
 .auth-title {
-  color: #ffc107;
+  color: #003e86;
   font-weight: 800;
   letter-spacing: 0.3px;
 }
 
 .auth-subtitle {
-  color: #f4f6f8;
+  color: #003e86;
   font-size: 0.95rem;
 }
 
@@ -216,6 +233,10 @@ const registerUser = async () => {
   background-color: #ffffff;
 }
 
+textarea.form-control {
+  min-height: 120px;
+}
+
 .form-control:focus,
 .form-select:focus {
   border-color: #ffc107;
@@ -226,7 +247,7 @@ const registerUser = async () => {
   color: #9aa4b2;
 }
 
-.register-btn {
+.auth-btn {
   min-height: 50px;
   border-radius: 12px;
   font-weight: 700;
@@ -236,13 +257,13 @@ const registerUser = async () => {
   transition: all 0.25s ease;
 }
 
-.register-btn:hover:not(:disabled) {
+.auth-btn:hover:not(:disabled) {
   background-color: #ffc107;
   color: #003e86;
   border-color: #ffc107;
 }
 
-.register-btn:disabled {
+.auth-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }

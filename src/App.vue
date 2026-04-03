@@ -18,7 +18,5 @@ onBeforeMount(async () => {
 <template>
   <Navbar />
   <RouterView v-if="userStore.bootstrapped" /> 
-  <Footer />
-
-  
+  <Footer /> 
 </template>

@@ -1,14 +1,14 @@
 <template>
   <div class="feedback-page py-4 py-md-5">
     <div class="container">
-      <div class="page-header mb-4">
-        <h2 class="page-title mb-1">Feedback</h2>
-        <p class="page-subtitle mb-0">
+      <div class="page-header mb-3">
+        <h2 class="page-title mb-1 text-center">Contact Us</h2>
+        <p class="page-subtitle mb-0 text-center">
           Share your comments, suggestions, or concerns with us.
         </p>
 
 
-          <div class="card-body p-2 p-sm-4 p-md-5 mb-2">
+          <div class="card-body p-2 p-sm-4 p-md-4 mb-0">
             <form @submit.prevent="submitFeedback">
               <div class="row g-3">
                 <div class="col-12 col-md-6">

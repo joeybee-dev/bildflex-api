@@ -1,12 +1,13 @@
 <template>
   <section class="blog-page-wrapper py-4 py-md-5">
     <div class="container">
-      <div class="page-header mb-4">
+      <div class="page-header mb-4 text-center">
         <h2 class="page-title mb-1">Blogs</h2>
-        <p class="page-subtitle mb-0">
+        <p class="page-subtitle mb-1">
           Read updates, tips, and insights from the trusted construction network.
+          <Blog_001 />
         </p>
-        <Blog_001 />
+        
       </div>
 
     </div>
@@ -14,7 +15,7 @@
 </template>
 
 <script setup>
-import Blog_001 from "../blogs/Blog_001.vue";
+import Blog_001 from "@/pages/blog/Blog_001.vue";
 </script>
 
 <style scoped>
