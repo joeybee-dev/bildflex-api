@@ -21,32 +21,17 @@ const profileRoute = computed(() => {
 
   switch (userType.value) {
     case "designer":
-      return "/details-designer";
+      return "/designer/profile";
     case "handyman":
-      return "/details-handyman";
+      return "/handyman/profile";
     case "contractor":
-      return "/details-contractor";
+      return "/contractor/profile";
     case "supplier":
       return "/supplier/profile";
     default:
       return "/profile";
   }
 });
-
-/*const logoutRoute = computed(() => {
-  switch (userType.value) {
-    case "designer":
-      return "/logout-designer";
-    case "handyman":
-      return "/logout-handyman";
-    case "contractor":
-      return "/logout-contractor";
-    case "supplier":
-      return "/logout-supplier";
-    default:
-      return "/logout-user";
-  }
-});*/
 
 const logoutRoute = computed(() => "/logout");
 
@@ -168,16 +153,7 @@ onBeforeUnmount(() => {
         <ul
           class="navbar-nav ms-auto align-items-start align-items-lg-center gap-lg-2 nav-list"
         >
-          <li class="nav-item">
-            <router-link
-              to="/about"
-              class="nav-link custom-nav-link"
-              @click="closeNavbarOnMobile"
-            >
-              About
-            </router-link>
-          </li>
-
+          
           <li
             ref="servicesDropdownRef"
             class="nav-item dropdown services-dropdown w-100 w-lg-auto"
@@ -257,6 +233,16 @@ onBeforeUnmount(() => {
             </router-link>
           </li>
 
+          <li class="nav-item">
+            <router-link
+              to="/about"
+              class="nav-link custom-nav-link"
+              @click="closeNavbarOnMobile"
+            >
+              About
+            </router-link>
+          </li>
+
           <li
             ref="accountDropdownRef"
             class="nav-item dropdown login-dropdown w-100 w-lg-auto"
@@ -289,7 +275,7 @@ onBeforeUnmount(() => {
                 </li>
                 <li>
                   <router-link
-                    to="/login"
+                    to="/handyman/login"
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
@@ -298,7 +284,7 @@ onBeforeUnmount(() => {
                 </li>
                 <li>
                   <router-link
-                    to="/login"
+                    to="/designer/login"
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
@@ -307,7 +293,7 @@ onBeforeUnmount(() => {
                 </li>
                 <li>
                   <router-link
-                    to="/login"
+                    to="/contractor/login"
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >

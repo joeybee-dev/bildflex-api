@@ -16,15 +16,12 @@ import RegisterUser from "../pages/users/RegisterUser.vue";
 import LoginUser from "../pages/users/LoginUser.vue";
 import ForgotPasswordUser from "../pages/users/ForgotPasswordUser.vue";
 import ResetPasswordUser from "../pages/users/ResetPasswordUser.vue";
-
-// Users - Logged-in
 import MyProfileUser from "../pages/users/MyProfileUser.vue";
 import EditProfileUser from "../pages/users/EditProfileUser.vue";
 import ProfilePhotoUser from "../pages/users/ProfilePhotoUser.vue";
 import ChangePasswordUser from "../pages/users/ChangePasswordUser.vue";
 import DeactivateAccountUser from "../pages/users/DeactivateAccountUser.vue";
 import FavoritesPage from "../pages/users/FavoritesPage.vue";
-
 import MyInquiriesPage from "@/pages/users/MyInquiriesPage.vue";
 import InquiryDetailsPage from "@/pages/users/InquiryDetailsPage.vue";
 import MyBookingsPage from "@/pages/users/MyBookingsPage.vue";
@@ -34,6 +31,55 @@ import MessageDetailsPage from "@/pages/users/MessageDetailsPage.vue";
 import SearchHistoryPage from "@/pages/users/SearchHistoryPage.vue";
 import AdminUsersPage from "@/pages/users/AdminUsersPage.vue";
 import AdminUserDetailsPage from "@/pages/users/AdminUserDetailsPage.vue";
+
+// Handymen
+
+
+// Designers
+import RegisterDesigner from "@/pages/designers/RegisterDesigner.vue";
+import LoginDesigner from "@/pages/designers/LoginDesigner.vue";
+import ForgotPasswordDesigner from "@/pages/designers/ForgotPasswordDesigner.vue";
+import ResetPasswordDesigner from "@/pages/designers/ResetPasswordDesigner.vue";
+import ActiveDesigners from "@/pages/designers/ActiveDesigners.vue";
+import FeaturedDesigners from "@/pages/designers/FeaturedDesigners.vue";
+import DetailsDesigner from "@/pages/designers/DetailsDesigner.vue";
+import MyProfileDesigner from "@/pages/designers/MyProfileDesigner.vue";
+import EditProfileDesigner from "@/pages/designers/EditProfileDesigner.vue";
+import UpdatePhotoDesigner from "@/pages/designers/UpdatePhotoDesigner.vue";
+import ChangePasswordDesigner from "@/pages/designers/ChangePasswordDesigner.vue";
+import DeactivateAccountDesigner from "@/pages/designers/DeactivateAccountDesigner.vue";
+import MyInquiriesDesigner from "@/pages/designers/MyInquiriesDesigner.vue";
+import InquiryDetailsDesigner from "@/pages/designers/InquiryDetailsDesigner.vue";
+import MyBookingsDesigner from "@/pages/designers/MyBookingsDesigner.vue";
+import BookingDetailsDesigner from "@/pages/designers/BookingDetailsDesigner.vue";
+import MessagesDesigner from "@/pages/designers/MessagesDesigner.vue";
+import MessageDetailsDesigner from "@/pages/designers/MessageDetailsDesigner.vue";
+import FavoritesDesigner from "@/pages/designers/FavoritesDesigner.vue";
+import AdminDesigners from "@/pages/designers/AdminDesigners.vue";
+import AdminDesignerDetails from "@/pages/designers/AdminDesignerDetails.vue";
+
+// Contractors
+import RegisterContractor from "@/pages/contractors/RegisterContractor.vue";
+import LoginContractor from "@/pages/contractors/LoginContractor.vue";
+import ForgotPasswordContractor from "@/pages/contractors/ForgotPasswordContractor.vue";
+import ResetPasswordContractor from "@/pages/contractors/ResetPasswordContractor.vue";
+import ActiveContractors from "@/pages/contractors/ActiveContractors.vue";
+import FeaturedContractors from "@/pages/contractors/FeaturedContractors.vue";
+import DetailsContractor from "@/pages/contractors/DetailsContractor.vue";
+import MyProfileContractor from "@/pages/contractors/MyProfileContractor.vue";
+import EditProfileContractor from "@/pages/contractors/EditProfileContractor.vue";
+import UpdatePhotoContractor from "@/pages/contractors/UpdatePhotoContractor.vue";
+import ChangePasswordContractor from "@/pages/contractors/ChangePasswordContractor.vue";
+import DeactivateAccountContractor from "@/pages/contractors/DeactivateAccountContractor.vue";
+import MyInquiriesContractor from "@/pages/contractors/MyInquiriesContractor.vue";
+import InquiryDetailsContractor from "@/pages/contractors/InquiryDetailsContractor.vue";
+import MyBookingsContractor from "@/pages/contractors/MyBookingsContractor.vue";
+import BookingDetailsContractor from "@/pages/contractors/BookingDetailsContractor.vue";
+import MessagesContractor from "@/pages/contractors/MessagesContractor.vue";
+import MessageDetailsContractor from "@/pages/contractors/MessageDetailsContractor.vue";
+import FavoritesContractor from "@/pages/contractors/FavoritesContractor.vue";
+import AdminContractors from "@/pages/contractors/AdminContractors.vue";
+import AdminContractorDetails from "@/pages/contractors/AdminContractorDetails.vue";
 
 // Suppliers
 import RegisterSupplier from "@/pages/suppliers/RegisterSupplier.vue";
@@ -57,17 +103,6 @@ import MessageDetailsSupplier from "@/pages/suppliers/MessageDetailsSupplier.vue
 import FavoritesSupplier from "@/pages/suppliers/FavoritesSupplier.vue";
 import AdminSuppliers from "@/pages/suppliers/AdminSuppliers.vue";
 import AdminSupplierDetails from "@/pages/suppliers/AdminSupplierDetails.vue";
-
-
-// Handymen
-import RegisterHandyman from "../pages/handymen/RegisterHandyman.vue";
-import LoginHandyman from "../pages/handymen/LoginHandyman.vue";
-import DetailsHandyman from "../pages/handymen/DetailsHandyman.vue";
-import MyProfileHandyman from "../pages/handymen/MyProfileHandyman.vue";
-import AllHandymen from "../pages/handymen/AllHandymen.vue";
-import ActiveHandymen from "../pages/handymen/ActiveHandymen.vue";
-import SpecificHandyman from "../pages/handymen/SpecificHandyman.vue";
-
 
 
 const router = createRouter({
@@ -124,8 +159,6 @@ const router = createRouter({
       name: "reset-password-user",
       component: ResetPasswordUser
     },
-
-  // Users - Loggedin
     {
       path: "/profile",
       name: "my-profile-user",
@@ -201,8 +234,256 @@ const router = createRouter({
       name: "admin-user-details",
       component: AdminUserDetailsPage
     },
- 
- 
+
+
+// Handymen
+
+
+
+// Designers
+    {
+      path: "/designer/register",
+      name: "register-designer",
+      component: RegisterDesigner
+    },
+    {
+      path: "/designer/login",
+      name: "login-designer",
+      component: LoginDesigner
+    },
+    {
+      path: "/designer/forgot-password",
+      name: "forgot-password-designer",
+      component: ForgotPasswordDesigner
+    },
+    {
+      path: "/designer/reset-password/:token",
+      name: "reset-password-designer",
+      component: ResetPasswordDesigner
+    },
+    {
+      path: "/designers",
+      name: "active-designers",
+      component: ActiveDesigners
+    },
+    {
+      path: "/designers/featured",
+      name: "featured-designers",
+      component: FeaturedDesigners
+    },
+    {
+      path: "/designers/:id",
+      name: "details-designer",
+      component: DetailsDesigner
+    },
+    {
+      path: "/designer/profile",
+      name: "my-profile-designer",
+      component: MyProfileDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/profile/edit",
+      name: "edit-profile-designer",
+      component: EditProfileDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/profile/photo",
+      name: "update-photo-designer",
+      component: UpdatePhotoDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/change-password",
+      name: "change-password-designer",
+      component: ChangePasswordDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/deactivate-account",
+      name: "deactivate-account-designer",
+      component: DeactivateAccountDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/inquiries",
+      name: "designer-inquiries",
+      component: MyInquiriesDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/inquiries/:id",
+      name: "designer-inquiry-details",
+      component: InquiryDetailsDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/bookings",
+      name: "designer-bookings",
+      component: MyBookingsDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/bookings/:id",
+      name: "designer-booking-details",
+      component: BookingDetailsDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/messages",
+      name: "designer-messages",
+      component: MessagesDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/messages/:id",
+      name: "designer-message-details",
+      component: MessageDetailsDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/designer/favorites",
+      name: "designer-favorites",
+      component: FavoritesDesigner,
+      meta: { requiresAuth: true, userType: "designer" }
+    },
+    {
+      path: "/admin/designers",
+      name: "admin-designers",
+      component: AdminDesigners,
+      meta: { requiresAuth: true, adminOnly: true }
+    },
+    {
+      path: "/admin/designers/:id",
+      name: "admin-designer-details",
+      component: AdminDesignerDetails,
+      meta: { requiresAuth: true, adminOnly: true }
+    },
+
+
+// Contractors    
+    {
+      path: "/contractor/register",
+      name: "register-contractor",
+      component: RegisterContractor
+    },
+    {
+      path: "/contractor/login",
+      name: "login-contractor",
+      component: LoginContractor
+    },
+    {
+      path: "/contractor/forgot-password",
+      name: "forgot-password-contractor",
+      component: ForgotPasswordContractor
+    },
+    {
+      path: "/contractor/reset-password/:token",
+      name: "reset-password-contractor",
+      component: ResetPasswordContractor
+    },
+    {
+      path: "/contractors",
+      name: "active-contractors",
+      component: ActiveContractors
+    },
+    {
+      path: "/contractors/featured",
+      name: "featured-contractors",
+      component: FeaturedContractors
+    },
+    {
+      path: "/contractors/:id",
+      name: "details-contractor",
+      component: DetailsContractor
+    },
+    {
+      path: "/contractor/profile",
+      name: "my-profile-contractor",
+      component: MyProfileContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/profile/edit",
+      name: "edit-profile-contractor",
+      component: EditProfileContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/profile/photo",
+      name: "update-photo-contractor",
+      component: UpdatePhotoContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/change-password",
+      name: "change-password-contractor",
+      component: ChangePasswordContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/deactivate-account",
+      name: "deactivate-account-contractor",
+      component: DeactivateAccountContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/inquiries",
+      name: "contractor-inquiries",
+      component: MyInquiriesContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/inquiries/:id",
+      name: "contractor-inquiry-details",
+      component: InquiryDetailsContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/bookings",
+      name: "contractor-bookings",
+      component: MyBookingsContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/bookings/:id",
+      name: "contractor-booking-details",
+      component: BookingDetailsContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/messages",
+      name: "contractor-messages",
+      component: MessagesContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/messages/:id",
+      name: "contractor-message-details",
+      component: MessageDetailsContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/contractor/favorites",
+      name: "contractor-favorites",
+      component: FavoritesContractor,
+      meta: { requiresAuth: true, userType: "contractor" }
+    },
+    {
+      path: "/admin/contractors",
+      name: "admin-contractors",
+      component: AdminContractors,
+      meta: { requiresAuth: true, adminOnly: true }
+    },
+    {
+      path: "/admin/contractors/:id",
+      name: "admin-contractor-details",
+      component: AdminContractorDetails,
+      meta: { requiresAuth: true, adminOnly: true }
+    },
+
+
 // Suppliers
     {
       path: "/supplier/register",
@@ -325,46 +606,6 @@ const router = createRouter({
     },
 
 
-// Handymen
-    {
-      path: "/register-handyman",
-      name: "register-handyman",
-      component: RegisterHandyman
-    },
-    {
-      path: "/login-handyman",
-      name: "login-handyman",
-      component:LoginHandyman
-    },
-    {
-      path: "/details-handyman",
-      name: "details-handyman",
-      component: DetailsHandyman
-    },
-    {
-      path: "/details-handyman/:handymanId",
-      name: "myprofile-handyman",
-      component: MyProfileHandyman
-    },
-    {
-      path: "/all-handymen",
-      name: "all-handymen",
-      component: AllHandymen
-    },
-    {
-      path: "/active-handymen",
-      name: "active-handymen",
-      component: ActiveHandymen
-    },
-    {
-      path: "/handymen/:handymanId",
-      name: "specific-handyman",
-      component: SpecificHandyman
-    },
-
-
-
-
 // Images
     {
       path: "/upload-image/:profileId",
@@ -389,13 +630,6 @@ router.beforeEach(async (to, from, next) => {
 
   if (!requiresAuth) {
     return next();
-  }
-
-  if (!userStore.isLoggedIn) {
-    if (requiredUserType === "professional") {
-      return next("/login-prof");
-    }
-    return next("/login-user");
   }
 
   if (requiredUserType && userStore.user.userType !== requiredUserType) {
