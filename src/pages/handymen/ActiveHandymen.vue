@@ -1,176 +1,79 @@
 <template>
-  <div class="page-wrapper py-5">
+  <div class="auth-page py-5">
     <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="page-title mb-2">Active Handymen</h2>
-        <p class="page-subtitle mb-0">
-          Browse verified and active handyman service providers.
-        </p>
-      </div>
-
-      <div class="row justify-content-center mb-4">
-        <div class="col-12 col-md-8 col-lg-6">
-          <input
-            v-model.trim="search"
-            type="text"
-            class="form-control"
-            placeholder="Search handyman by name, city, or specialty"
-          />
+      <div class="card auth-card border-0 shadow-sm">
+        <div class="auth-header text-center">
+          <h2 class="auth-title mb-2">Active Handymen</h2>
+          <p class="auth-subtitle mb-0">Browse active handymen and their services.</p>
         </div>
-      </div>
 
-      <div v-if="loading" class="text-center py-5">
-        <div class="spinner-border text-warning" role="status"></div>
-        <p class="mt-3 text-muted">Loading active handymen...</p>
-      </div>
+        <div class="card-body p-4 p-md-5">
+          <div v-if="loading" class="text-center py-5">
+            <div class="spinner-border text-warning" role="status"></div>
+          </div>
 
-      <div v-else-if="filteredHandymen.length" class="row g-4">
-        <div
-          v-for="handyman in filteredHandymen"
-          :key="handyman._id"
-          class="col-12 col-md-6 col-lg-4"
-        >
-          <div class="card handyman-card h-100 border-0 shadow-sm">
-            <img
-              :src="handyman.profilePhoto || defaultPhoto"
-              class="card-img-top handyman-photo"
-              alt="Handyman"
-            />
+          <div v-else-if="handymen.length === 0" class="text-center py-5">
+            <h5 class="empty-title">No handymen found</h5>
+          </div>
 
-            <div class="card-body d-flex flex-column">
-              <span class="badge specialty-badge align-self-start mb-2">
-                {{ handyman.specialty || "Handyman" }}
-              </span>
-
-              <h5 class="card-title fw-bold mb-1">
-                {{ handyman.fullName || `${handyman.firstName || ""} ${handyman.lastName || ""}`.trim() }}
-              </h5>
-
-              <p class="text-muted small mb-2">
-                {{ handyman.city || "N/A" }}{{ handyman.province ? `, ${handyman.province}` : "" }}
-              </p>
-
-              <p class="card-text text-muted flex-grow-1">
-                {{ handyman.servicesOffered || "Reliable handyman services available." }}
-              </p>
-
-              <router-link
-                :to="`/handymen/${handyman._id}`"
-                class="btn custom-primary-btn mt-3"
-              >
-                View Details
-              </router-link>
+          <div v-else class="row g-4">
+            <div v-for="handyman in handymen" :key="handyman._id" class="col-12 col-md-6 col-lg-4">
+              <div class="content-card h-100">
+                <div class="text-center mb-3">
+                  <img :src="handyman.profilePhoto || fallbackImage" class="profile-image" alt="Handyman" />
+                </div>
+                <h5 class="content-title text-center mb-1">{{ handyman.businessName || handyman.companyName || "Handyman" }}</h5>
+                <p class="content-meta text-center mb-1">{{ handyman.specialization || "Handyman" }}</p>
+                <p class="content-meta text-center mb-3">{{ handyman.city || "-" }}</p>
+                <div class="d-grid">
+                  <router-link :to="`/handymen/${handyman._id}`" class="btn login-btn">View Details</router-link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div v-else class="alert alert-warning text-center">
-        No active handymen found.
-      </div>
+      </div>  
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
+import api from "@/services/api";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
-import api from "@/services/api";
 
-const handymen = ref([]);
 const loading = ref(false);
-const search = ref("");
+const handymen = ref([]);
 const notyf = new Notyf();
+const fallbackImage = "/favicon.ico";
 
-const defaultPhoto = "/src/assets/images/default-male.jpg";
-
-const filteredHandymen = computed(() => {
-  const keyword = search.value.toLowerCase();
-
-  if (!keyword) return handymen.value;
-
-  return handymen.value.filter((item) => {
-    const fullName = item.fullName || `${item.firstName || ""} ${item.lastName || ""}`.trim();
-
-    return (
-      fullName.toLowerCase().includes(keyword) ||
-      (item.city || "").toLowerCase().includes(keyword) ||
-      (item.specialty || "").toLowerCase().includes(keyword)
-    );
-  });
-});
-
-const fetchActiveHandymen = async () => {
+const fetchHandymen = async () => {
   try {
     loading.value = true;
-    const response = await api.get("/handymen/active-handymen");
+    const response = await api.get("/handymen/active");
     handymen.value = response.data?.handymen || [];
-  } catch (error) {
-    console.error("Error fetching active handymen:", error);
-    notyf.error(error?.response?.data?.error || "Failed to load active handymen.");
+  } catch (err) {
+    notyf.error(err.response?.data?.error || "Failed to load handymen.");
   } finally {
     loading.value = false;
   }
 };
 
-onMounted(() => {
-  fetchActiveHandymen();
-});
+onMounted(fetchHandymen);
 </script>
 
 <style scoped>
-.page-wrapper {
-  min-height: 100vh;
-  background: #f4f6f8;
-}
-
-.page-title {
-  color: #003e86;
-  font-weight: 800;
-}
-
-.page-subtitle {
-  color: #6c757d;
-}
-
-.handyman-card {
-  border-radius: 18px;
-}
-
-.handyman-photo {
-  height: 220px;
-  object-fit: cover;
-  background: #e9ecef;
-}
-
-.specialty-badge {
-  background: #ffc107;
-  color: #003e86;
-  font-weight: 700;
-}
-
-.custom-primary-btn {
-  background: #003e86;
-  border-color: #003e86;
-  color: #fff;
-  font-weight: 700;
-}
-
-.custom-primary-btn:hover {
-  background: #002c60;
-  border-color: #002c60;
-  color: #fff;
-}
-
-.form-control {
-  min-height: 48px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 62, 134, 0.18);
-}
-
-.form-control:focus {
-  border-color: #ffc107;
-  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.18);
-}
+.auth-page { min-height: 100vh; background-color: #f4f6f8; }
+.auth-card { border-radius: 20px; overflow: hidden; background: #fff; border: 1px solid rgba(0,62,134,.1); }
+.auth-header { border-bottom: 3px solid #ffc107; padding: 2rem 1.5rem 1.75rem; }
+.auth-title { color: #003e86; font-weight: 800; }
+.auth-subtitle { color: #003e86; }
+.content-card { border: 1px solid rgba(0,62,134,.12); border-radius: 18px; padding: 1.25rem; background: #fff; }
+.profile-image { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid #ffc107; }
+.content-title { color: #003e86; font-weight: 800; }
+.content-meta { color: #6c757d; }
+.login-btn { min-height: 48px; border-radius: 12px; font-weight: 700; background-color: #003e86; color: #fff; border: 1px solid #003e86; }
+.login-btn:hover { background-color: #ffc107; color: #003e86; border-color: #ffc107; }
+.empty-title { color: #003e86; font-weight: 800; }
 </style>

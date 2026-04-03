@@ -33,7 +33,27 @@ import AdminUsersPage from "@/pages/users/AdminUsersPage.vue";
 import AdminUserDetailsPage from "@/pages/users/AdminUserDetailsPage.vue";
 
 // Handymen
-
+import RegisterHandyman from "@/pages/handymen/RegisterHandyman.vue";
+import LoginHandyman from "@/pages/handymen/LoginHandyman.vue";
+import ForgotPasswordHandyman from "@/pages/handymen/ForgotPasswordHandyman.vue";
+import ResetPasswordHandyman from "@/pages/handymen/ResetPasswordHandyman.vue";
+import ActiveHandymen from "@/pages/handymen/ActiveHandymen.vue";
+import FeaturedHandymen from "@/pages/handymen/FeaturedHandymen.vue";
+import DetailsHandyman from "@/pages/handymen/DetailsHandyman.vue";
+import MyProfileHandyman from "@/pages/handymen/MyProfileHandyman.vue";
+import EditProfileHandyman from "@/pages/handymen/EditProfileHandyman.vue";
+import UpdatePhotoHandyman from "@/pages/handymen/UpdatePhotoHandyman.vue";
+import ChangePasswordHandyman from "@/pages/handymen/ChangePasswordHandyman.vue";
+import DeactivateAccountHandyman from "@/pages/handymen/DeactivateAccountHandyman.vue";
+import MyInquiriesHandyman from "@/pages/handymen/MyInquiriesHandyman.vue";
+import InquiryDetailsHandyman from "@/pages/handymen/InquiryDetailsHandyman.vue";
+import MyBookingsHandyman from "@/pages/handymen/MyBookingsHandyman.vue";
+import BookingDetailsHandyman from "@/pages/handymen/BookingDetailsHandyman.vue";
+import MessagesHandyman from "@/pages/handymen/MessagesHandyman.vue";
+import MessageDetailsHandyman from "@/pages/handymen/MessageDetailsHandyman.vue";
+import FavoritesHandyman from "@/pages/handymen/FavoritesHandyman.vue";
+import AdminHandymen from "@/pages/handymen/AdminHandymen.vue";
+import AdminHandymanDetails from "@/pages/handymen/AdminHandymanDetails.vue";
 
 // Designers
 import RegisterDesigner from "@/pages/designers/RegisterDesigner.vue";
@@ -237,7 +257,125 @@ const router = createRouter({
 
 
 // Handymen
-
+    {
+      path: "/handyman/register",
+      name: "register-handyman",
+      component: RegisterHandyman
+    },
+    {
+      path: "/handyman/login",
+      name: "login-handyman",
+      component: LoginHandyman
+    },
+    {
+      path: "/handyman/forgot-password",
+      name: "forgot-password-handyman",
+      component: ForgotPasswordHandyman
+    },
+    {
+      path: "/handyman/reset-password/:token",
+      name: "reset-password-handyman",
+      component: ResetPasswordHandyman
+    },
+    {
+      path: "/handymen",
+      name: "active-handymen",
+      component: ActiveHandymen
+    },
+    {
+      path: "/handymen/featured",
+      name: "featured-handymen",
+      component: FeaturedHandymen
+    },
+    {
+      path: "/handymen/:id",
+      name: "details-handyman",
+      component: DetailsHandyman
+    },
+    {
+      path: "/handyman/profile",
+      name: "my-profile-handyman",
+      component: MyProfileHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/profile/edit",
+      name: "edit-profile-handyman",
+      component: EditProfileHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/profile/photo",
+      name: "update-photo-handyman",
+      component: UpdatePhotoHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/change-password",
+      name: "change-password-handyman",
+      component: ChangePasswordHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/deactivate-account",
+      name: "deactivate-account-handyman",
+      component: DeactivateAccountHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/inquiries",
+      name: "handyman-inquiries",
+      component: MyInquiriesHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/inquiries/:id",
+      name: "handyman-inquiry-details",
+      component: InquiryDetailsHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/bookings",
+      name: "handyman-bookings",
+      component: MyBookingsHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/bookings/:id",
+      name: "handyman-booking-details",
+      component: BookingDetailsHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/messages",
+      name: "handyman-messages",
+      component: MessagesHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/messages/:id",
+      name: "handyman-message-details",
+      component: MessageDetailsHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/handyman/favorites",
+      name: "handyman-favorites",
+      component: FavoritesHandyman,
+      meta: { requiresAuth: true, userType: "handyman" }
+    },
+    {
+      path: "/admin/handymen",
+      name: "admin-handymen",
+      component: AdminHandymen,
+      meta: { requiresAuth: true, adminOnly: true }
+    },
+    {
+      path: "/admin/handymen/:id",
+      name: "admin-handyman-details",
+      component: AdminHandymanDetails,
+      meta: { requiresAuth: true, adminOnly: true }
+    },
 
 
 // Designers
