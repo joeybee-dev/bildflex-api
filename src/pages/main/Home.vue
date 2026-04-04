@@ -17,35 +17,43 @@
               <div class="row g-2">
                 <div class="col-12 col-md-5">
                   <input
+                    v-model="search.service"
                     type="text"
                     class="form-control search-input"
                     placeholder="What services are you looking for?"
-                    v-model="search.service"
                   />
                 </div>
 
                 <div class="col-12 col-md-4">
                   <input
+                    v-model="search.location"
                     type="text"
                     class="form-control search-input"
                     placeholder="Enter city or province..."
-                    v-model="search.location"
                   />
                 </div>
 
                 <div class="col-12 col-md-3">
-                  <button class="btn w-100 search-btn">
+                  <button class="btn w-100 search-btn" @click="handleSearch">
                     Search
                   </button>
                 </div>
               </div>
             </div>
 
-            <div class="join-provider-wrapper mt-5">
-              <router-link to="/register-prof" class="join-provider-link">
+            <div
+              class="join-provider-wrapper mt-5"
+              role="button"
+              tabindex="0"
+              @click="goToJoinPage"
+              @keydown.enter.prevent="goToJoinPage"
+              @keydown.space.prevent="goToJoinPage"
+            >
+              <span class="join-provider-link">
                 Join as Service Provider for FREE now!
-              </router-link>
+              </span>
             </div>
+
           </div>
         </div>
       </div>
@@ -60,23 +68,78 @@
           </p>
         </div>
 
+        
         <div class="row g-4">
-          <div
-            v-for="item in highlights"
-            :key="item.title"
-            class="col-12 col-sm-6 col-lg-3"
-          >
-            <div class="card border-0 shadow-sm h-100 highlight-card text-center">
-              <div class="card-body p-4">
-                <div class="icon-circle mx-auto mb-3">
-                  <span class="material-symbols-outlined">{{ item.icon }}</span>
+
+          <!-- Handymen -->
+          <div class="col-12 col-sm-6 col-lg-3">
+            <router-link to="/handymen" class="text-decoration-none">
+              <div class="card border-0 shadow-sm h-100 highlight-card text-center clickable-card">
+                <div class="card-body p-4">
+                  <div class="icon-circle mx-auto mb-3">
+                    <span class="material-symbols-outlined">construction</span>
+                  </div>
+                  <h5 class="service-card-title fw-bold mb-2">Handymen</h5>
+                  <p class="service-card-text mb-0">
+                    Skilled repair and maintenance professionals for home and site work.
+                  </p>
                 </div>
-                <h5 class="service-card-title fw-bold mb-2">{{ item.title }}</h5>
-                <p class="service-card-text mb-0">{{ item.description }}</p>
               </div>
-            </div>
+            </router-link>
+          </div>
+
+          <!-- Designers -->
+          <div class="col-12 col-sm-6 col-lg-3">
+            <router-link to="/designers" class="text-decoration-none">
+              <div class="card border-0 shadow-sm h-100 highlight-card text-center clickable-card">
+                <div class="card-body p-4">
+                  <div class="icon-circle mx-auto mb-3">
+                    <span class="material-symbols-outlined">draw</span>
+                  </div>
+                  <h5 class="service-card-title fw-bold mb-2">Designers</h5>
+                  <p class="service-card-text mb-0">
+                    Creative experts for plans, layouts, and design concepts.
+                  </p>
+                </div>
+              </div>
+            </router-link>
+          </div>
+
+          <!-- Contractors -->
+          <div class="col-12 col-sm-6 col-lg-3">
+            <router-link to="/contractors" class="text-decoration-none">
+              <div class="card border-0 shadow-sm h-100 highlight-card text-center clickable-card">
+                <div class="card-body p-4">
+                  <div class="icon-circle mx-auto mb-3">
+                    <span class="material-symbols-outlined">engineering</span>
+                  </div>
+                  <h5 class="service-card-title fw-bold mb-2">Contractors</h5>
+                  <p class="service-card-text mb-0">
+                    Trusted builders for residential, commercial, and industrial projects.
+                  </p>
+                </div>
+              </div>
+            </router-link>
+          </div>
+
+          <!-- Suppliers -->
+          <div class="col-12 col-sm-6 col-lg-3">
+            <router-link to="/suppliers" class="text-decoration-none">
+              <div class="card border-0 shadow-sm h-100 highlight-card text-center clickable-card">
+                <div class="card-body p-4">
+                  <div class="icon-circle mx-auto mb-3">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                  </div>
+                  <h5 class="service-card-title fw-bold mb-2">Suppliers</h5>
+                  <p class="service-card-text mb-0">
+                    Reliable sources for materials, equipment, and construction supplies.
+                  </p>
+                </div>
+              </div>
+            </router-link>
           </div>
         </div>
+
       </div>
     </section>
 
@@ -121,8 +184,6 @@
                   <p class="card-text expert-description flex-grow-1">
                     {{ expert.description }}
                   </p>
-
-                <!--   <button class="btn expert-btn mt-3">View Profile</button> -->
                 </div>
               </div>
             </div>
@@ -135,11 +196,30 @@
 
 <script setup>
 import { reactive } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const search = reactive({
   service: "",
   location: ""
 });
+
+
+
+const handleSearch = () => {
+  router.push({
+    path: "/search",
+    query: {
+      service: search.service,
+      location: search.location
+    }
+  });
+};
+
+const goToJoinPage = () => {
+  router.push("/join-bildflex");
+};
 
 const highlights = [
   {
@@ -386,7 +466,25 @@ const featuredExperts = [
 }
 
 .join-provider-wrapper {
-  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.85rem 1.4rem;
+  border: 2px solid #ffc107;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: rgba(255, 193, 7, 0.08);
+}
+
+.join-provider-wrapper:hover {
+  background-color: #ffc107;
+  transform: translateY(-2px);
+}
+
+.join-provider-wrapper:hover .join-provider-link {
+  color: #003e86;
+  border-bottom-color: #003e86;
 }
 
 .join-provider-link {
@@ -397,11 +495,6 @@ const featuredExperts = [
   border-bottom: 2px solid #ffc107;
   padding-bottom: 2px;
   transition: all 0.25s ease;
-}
-
-.join-provider-link:hover {
-  color: #ffffff;
-  border-bottom-color: #ffffff;
 }
 
 .services-section {
@@ -461,14 +554,10 @@ const featuredExperts = [
   font-size: 32px;
 }
 
-.view-all-btn,
-.expert-btn {
+.view-all-btn {
   border-radius: 10px;
   font-weight: 600;
   transition: all 0.25s ease;
-}
-
-.view-all-btn {
   background-color: transparent;
   color: #003e86;
   border: 1px solid #ffc107;
@@ -477,18 +566,6 @@ const featuredExperts = [
 .view-all-btn:hover {
   background-color: #ffc107;
   color: #003e86;
-}
-
-.expert-btn {
-  background-color: #003e86;
-  color: #ffffff;
-  border: 1px solid #003e86;
-}
-
-.expert-btn:hover {
-  background-color: #ffc107;
-  color: #003e86;
-  border-color: #ffc107;
 }
 
 .expert-image {
@@ -532,6 +609,11 @@ const featuredExperts = [
 
   .expert-image {
     height: 200px;
+  }
+
+  .join-provider-wrapper {
+    width: 100%;
+    padding: 0.9rem 1rem;
   }
 }
 </style>

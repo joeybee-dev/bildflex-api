@@ -173,7 +173,7 @@ onBeforeUnmount(() => {
             >
               <li>
                 <router-link
-                  to="/services/handyman"
+                  to="/handymen"
                   class="dropdown-item"
                   @click="closeNavbarOnMobile"
                 >
@@ -183,7 +183,7 @@ onBeforeUnmount(() => {
 
               <li>
                 <router-link
-                  to="/services/designers"
+                  to="/designers"
                   class="dropdown-item"
                   @click="closeNavbarOnMobile"
                 >
@@ -193,7 +193,7 @@ onBeforeUnmount(() => {
 
               <li>
                 <router-link
-                  to="/services/contractors"
+                  to="/contractors"
                   class="dropdown-item"
                   @click="closeNavbarOnMobile"
                 >
@@ -203,7 +203,7 @@ onBeforeUnmount(() => {
 
               <li>
                 <router-link
-                  to="/services/suppliers"
+                  to="/suppliers"
                   class="dropdown-item"
                   @click="closeNavbarOnMobile"
                 >

@@ -7,6 +7,7 @@ import About from "../pages/main/About.vue";
 import Feedback from "../pages/main/Feedback.vue";
 import UploadImage from "../pages/main/UploadImage.vue";
 import LogoutPage from "../pages/main/LogoutPage.vue";
+import JoinBildflexPage from "../pages/main/JoinBildflexPage.vue";
 
 // Blog
 import Blogs from "../pages/blog/Blogs.vue";
@@ -149,6 +150,11 @@ const router = createRouter({
       path: "/logout",
       name: "logout",
       component: LogoutPage
+    },
+    {
+      path: "/join-bildflex",
+      name: "join-bildflex",
+      component: JoinBildflexPage
     },
 
 // Blogs  
