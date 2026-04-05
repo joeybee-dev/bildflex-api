@@ -80,16 +80,29 @@
                   </div>
 
                   <div class="d-flex flex-column flex-md-row gap-2 mt-4">
+
+                    <router-link
+                       v-if="user.isAdmin"
+                       to="/admin/dashboard"
+                       class="btn btn-warning dashboard-btn"
+                     >
+                       Dashboard
+                     </router-link>
+
                     <router-link to="/profile/edit" class="btn login-btn">
                       Edit Profile
                     </router-link>
+
                     <router-link to="/change-password" class="btn btn-outline-primary custom-outline-btn">
                       Change Password
                     </router-link>
+
                     <router-link to="/deactivate-account" class="btn btn-outline-danger custom-danger-btn">
                       Deactivate Account
                     </router-link>
+
                   </div>
+
                 </div>
               </div>
             </div>
@@ -119,7 +132,8 @@ const user = reactive({
   province: "",
   country: "",
   aboutMe: "",
-  profilePhoto: ""
+  profilePhoto: "",
+  isAdmin: false
 });
 
 const profilePhotoToShow = computed(() => {
@@ -146,10 +160,9 @@ const fetchProfile = async () => {
       province: data.province || "",
       country: data.country || "",
       aboutMe: data.aboutMe || "",
-      profilePhoto: data.profilePhoto || ""
+      profilePhoto: data.profilePhoto || "",
+      isAdmin: data.userType === "admin" || data.isAdmin === true
     });
-
-    console.log(response);
 
   } catch (err) {
     console.error("Fetch profile error:", err);
@@ -163,6 +176,13 @@ onMounted(fetchProfile);
 </script>
 
 <style scoped>
+.dashboard-btn {
+  min-height: 50px;
+  border-radius: 12px;
+  font-weight: 700;
+  color: #003e86;
+}
+
 .auth-page {
   min-height: 100vh;
   background-color: #f4f6f8;

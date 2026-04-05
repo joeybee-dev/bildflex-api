@@ -6,7 +6,7 @@ const year = new Date().getFullYear();
   <footer class="site-footer">
     <div class="container py-5">
       <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-4">
+        <div href="/" class="brand-block col-12 col-md-6 col-lg-4">
           <div class="footer-brand d-flex align-items-center mb-3">
             <img
               src="/favicon.ico"
@@ -33,16 +33,13 @@ const year = new Date().getFullYear();
           <h6 class="footer-heading">Quick Links</h6>
           <ul class="footer-links list-unstyled mb-0">
             <li>
-              <router-link to="/">Home</router-link>
+              <a href="/">Home</a>
             </li>
             <li>
               <router-link to="/blogs">Blogs</router-link>
             </li>
             <li>
-              <router-link to="/login-user">Login User</router-link>
-            </li>
-            <li>
-              <router-link to="/login-prof">Login Designer</router-link>
+              <router-link to="/login">Login User</router-link>
             </li>
           </ul>
         </div>
@@ -51,24 +48,24 @@ const year = new Date().getFullYear();
           <h6 class="footer-heading">For Providers</h6>
           <ul class="footer-links list-unstyled mb-0">
             <li>
-              <router-link to="/register-prof">Join as Service Provider</router-link>
+              <router-link to="/join-bildflex">Join as Service Provider</router-link>
             </li>
             <li>
-              <router-link to="/login-prof">Provider Login</router-link>
+              <router-link to="/join-bildflex">Provider Login</router-link>
+            </li>
+          <!--   <li>
+              <a>List Your Services</a>
             </li>
             <li>
-              <a href="#">List Your Services</a>
-            </li>
-            <li>
-              <a href="#">Grow Your Network</a>
-            </li>
+              <a>Grow Your Network</a>
+            </li> -->
           </ul>
         </div>
 
         <div class="col-12 col-lg-3">
           <h6 class="footer-heading">Contact</h6>
           <ul class="footer-contact list-unstyled mb-0">
-            <li>Email: support@bildflex.com</li>
+            <router-link to="/feedback">Email: support@bildflex.com</router-link>
             <!-- <li>Phone: +63 912 345 6789</li> -->
             <!-- <li>Location: Quezon City, Philippines</li> -->
           </ul>
@@ -83,9 +80,9 @@ const year = new Date().getFullYear();
         </p>
 
         <div class="footer-bottom-links d-flex flex-wrap gap-3">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Support</a>
+          <router-link to="/privacy-policy">Privacy Policy</router-link>
+          <router-link to="/terms-of-service">Terms Of Service</router-link>
+          <router-link to="/feedback">Support</router-link>
         </div>
       </div>
     </div>
@@ -182,6 +179,8 @@ const year = new Date().getFullYear();
 
   .footer-brand {
     justify-content: center;
+
   }
+
 }
 </style>

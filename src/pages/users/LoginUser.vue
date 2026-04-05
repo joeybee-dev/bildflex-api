@@ -103,37 +103,47 @@ const loginUser = async () => {
     }
 
     localStorage.setItem("token", token);
-    localStorage.setItem("userType", "user");
+
+    let loggedInUser = null;
 
     if (user) {
-      userStore.setUser({
+      loggedInUser = {
         id: user._id || null,
         firstName: user.firstName || "",
         lastName: user.lastName || "",
         email: user.email || "",
-        userType: user.userType || "user",
-        isAdmin: user.userType === "admin"
-      });
+        userType: user.userType || (user.isAdmin === true ? "admin" : "user"),
+        isAdmin: user.isAdmin === true || user.userType === "admin"
+      };
     } else {
-      try {
-        const detailsResponse = await api.get("/users/profile");
-        const details = detailsResponse.data?.user;
+      const detailsResponse = await api.get("/users/details");
+      const details = detailsResponse.data?.user;
 
-        userStore.setUser({
-          id: details?._id || null,
-          firstName: details?.firstName || "",
-          lastName: details?.lastName || "",
-          email: details?.email || "",
-          userType: details?.userType || "user",
-          isAdmin: details?.userType === "admin"
-        });
-      } catch (detailsError) {
-        console.error("Fetch details after login failed:", detailsError);
-      }
+      loggedInUser = {
+        id: details?._id || null,
+        firstName: details?.firstName || "",
+        lastName: details?.lastName || "",
+        email: details?.email || "",
+        userType:
+          details?.userType || (details?.isAdmin === true ? "admin" : "user"),
+        isAdmin: details?.isAdmin === true || details?.userType === "admin"
+      };
     }
 
+    localStorage.setItem(
+      "userType",
+      loggedInUser.isAdmin ? "admin" : "user"
+    );
+
+    userStore.setUser(loggedInUser);
+
     notyf.success("Logged in successfully.");
-    router.push("/");
+
+    if (loggedInUser.isAdmin) {
+      router.push("/admin/dashboard");
+    } else {
+      router.push("/");
+    }
   } catch (err) {
     console.error("Login user error:", err);
     notyf.error(
@@ -161,7 +171,6 @@ const loginUser = async () => {
 }
 
 .auth-header {
-  /*background-color: #003e86;*/
   border-bottom: 3px solid #ffc107;
   padding: 2rem 1.5rem 1.75rem;
 }

@@ -8,6 +8,9 @@ import Feedback from "../pages/main/Feedback.vue";
 import UploadImage from "../pages/main/UploadImage.vue";
 import LogoutPage from "../pages/main/LogoutPage.vue";
 import JoinBildflexPage from "../pages/main/JoinBildflexPage.vue";
+import Search from "../pages/main/Search.vue";
+import TermsOfService from "../pages/main/TermsOfService.vue";
+import PrivatePolicy from "../pages/main/PrivatePolicy.vue";
 
 // Blog
 import Blogs from "../pages/blog/Blogs.vue";
@@ -32,6 +35,7 @@ import MessageDetailsPage from "@/pages/users/MessageDetailsPage.vue";
 import SearchHistoryPage from "@/pages/users/SearchHistoryPage.vue";
 import AdminUsersPage from "@/pages/users/AdminUsersPage.vue";
 import AdminUserDetailsPage from "@/pages/users/AdminUserDetailsPage.vue";
+import AdminDashboardPage from "@/pages/users/AdminDashboardPage.vue";
 
 // Handymen
 import RegisterHandyman from "@/pages/handymen/RegisterHandyman.vue";
@@ -39,7 +43,7 @@ import LoginHandyman from "@/pages/handymen/LoginHandyman.vue";
 import ForgotPasswordHandyman from "@/pages/handymen/ForgotPasswordHandyman.vue";
 import ResetPasswordHandyman from "@/pages/handymen/ResetPasswordHandyman.vue";
 import ActiveHandymen from "@/pages/handymen/ActiveHandymen.vue";
-import FeaturedHandymen from "@/pages/handymen/FeaturedHandymen.vue";
+import FeaturedHandymen from "@/components/handymen/FeaturedHandymen.vue";
 import DetailsHandyman from "@/pages/handymen/DetailsHandyman.vue";
 import MyProfileHandyman from "@/pages/handymen/MyProfileHandyman.vue";
 import EditProfileHandyman from "@/pages/handymen/EditProfileHandyman.vue";
@@ -62,7 +66,7 @@ import LoginDesigner from "@/pages/designers/LoginDesigner.vue";
 import ForgotPasswordDesigner from "@/pages/designers/ForgotPasswordDesigner.vue";
 import ResetPasswordDesigner from "@/pages/designers/ResetPasswordDesigner.vue";
 import ActiveDesigners from "@/pages/designers/ActiveDesigners.vue";
-import FeaturedDesigners from "@/pages/designers/FeaturedDesigners.vue";
+import FeaturedDesigners from "@/components/designers/FeaturedDesigners.vue";
 import DetailsDesigner from "@/pages/designers/DetailsDesigner.vue";
 import MyProfileDesigner from "@/pages/designers/MyProfileDesigner.vue";
 import EditProfileDesigner from "@/pages/designers/EditProfileDesigner.vue";
@@ -85,7 +89,7 @@ import LoginContractor from "@/pages/contractors/LoginContractor.vue";
 import ForgotPasswordContractor from "@/pages/contractors/ForgotPasswordContractor.vue";
 import ResetPasswordContractor from "@/pages/contractors/ResetPasswordContractor.vue";
 import ActiveContractors from "@/pages/contractors/ActiveContractors.vue";
-import FeaturedContractors from "@/pages/contractors/FeaturedContractors.vue";
+import FeaturedContractors from "@/components/contractors/FeaturedContractors.vue";
 import DetailsContractor from "@/pages/contractors/DetailsContractor.vue";
 import MyProfileContractor from "@/pages/contractors/MyProfileContractor.vue";
 import EditProfileContractor from "@/pages/contractors/EditProfileContractor.vue";
@@ -108,7 +112,7 @@ import LoginSupplier from "@/pages/suppliers/LoginSupplier.vue";
 import ForgotPasswordSupplier from "@/pages/suppliers/ForgotPasswordSupplier.vue";
 import ResetPasswordSupplier from "@/pages/suppliers/ResetPasswordSupplier.vue";
 import ActiveSuppliers from "@/pages/suppliers/ActiveSuppliers.vue";
-import FeaturedSuppliers from "@/pages/suppliers/FeaturedSuppliers.vue";
+import FeaturedSuppliers from "@/components/suppliers/FeaturedSuppliers.vue";
 import DetailsSupplier from "@/pages/suppliers/DetailsSupplier.vue";
 import MyProfileSupplier from "@/pages/suppliers/MyProfileSupplier.vue";
 import EditProfileSupplier from "@/pages/suppliers/EditProfileSupplier.vue";
@@ -155,6 +159,21 @@ const router = createRouter({
       path: "/join-bildflex",
       name: "join-bildflex",
       component: JoinBildflexPage
+    },
+    {
+      path: "/search",
+      name: "search",
+      component: Search
+    },
+    {
+      path: "/terms-of-service",
+      name: "terms-of-service",
+      component: TermsOfService
+    },
+    {
+      path: "/privacy-policy",
+      name: "privacy-policy",
+      component: PrivatePolicy
     },
 
 // Blogs  
@@ -260,7 +279,12 @@ const router = createRouter({
       name: "admin-user-details",
       component: AdminUserDetailsPage
     },
-
+    {
+      path: "/admin/dashboard",
+      name: "admin-dashboard",
+      component: AdminDashboardPage,
+      meta: { requiresAuth: true, adminOnly: true }
+    },
 
 // Handymen
     {
@@ -755,7 +779,7 @@ const router = createRouter({
       path: "/upload-image/:profileId",
       name: "uploadImage",
       component: UploadImage,
-      meta: { requiresAuth: true, userType: "professional" }
+      meta: { requiresAuth: true, providerOnly: true }
     }
 
   ]
@@ -771,16 +795,28 @@ router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.meta.requiresAuth;
   const requiredUserType = to.meta.userType;
   const adminOnly = to.meta.adminOnly;
+  const providerOnly = to.meta.providerOnly;
 
   if (!requiresAuth) {
     return next();
   }
 
-  if (requiredUserType && userStore.user.userType !== requiredUserType) {
-    return next("/");
+  if (!userStore.user.id) {
+    return next("/login");
   }
 
   if (adminOnly && !userStore.user.isAdmin) {
+    return next("/");
+  }
+
+  if (providerOnly) {
+    const providerTypes = ["handyman", "designer", "contractor", "supplier"];
+    if (!providerTypes.includes(userStore.user.userType)) {
+      return next("/");
+    }
+  }
+
+  if (requiredUserType && userStore.user.userType !== requiredUserType) {
     return next("/");
   }
 

@@ -2,7 +2,7 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import api from "@/services/api";
 
-export const useUserStore = defineStore("user", () => {
+export const useUserStore = defineStore("user", () => { 
   const user = ref({
     id: localStorage.getItem("userId") || null,
     firstName: localStorage.getItem("firstName") || "",
@@ -27,10 +27,10 @@ export const useUserStore = defineStore("user", () => {
       lastName: userData.lastName || "",
       email: userData.email || "",
       isAdmin:
-        typeof userData.isAdmin === "boolean"
-          ? userData.isAdmin
-          : userData.userType === "admin",
-      userType: userData.userType || "user"
+        userData.isAdmin === true ||
+          userData.userType === "admin",
+      userType: 
+      userData.userType || (userData.isAdmin === true ? "admin" : "user")
     };
 
     if (user.value.id) {
@@ -130,13 +130,17 @@ export const useUserStore = defineStore("user", () => {
         } else {
           unsetUser();
         }
-      } else if ((userType === "user" || !userType) && token) {
+      } else if ((userType === "user" || userType === "admin" || !userType) && token) {
         const response = await api.get("/users/details");
         if (response.data?.user?._id) {
           setUser({
             ...response.data.user,
-            userType: response.data.user.userType || "user",
-            isAdmin: response.data.user.userType === "admin"
+            userType:
+              response.data.user.userType ||
+              (response.data.user.isAdmin === true ? "admin" : "user"),
+            isAdmin:
+              response.data.user.isAdmin === true ||
+              response.data.user.userType === "admin"
           });
         } else {
           unsetUser();

@@ -18,6 +18,16 @@ const AUTH_ROUTES = [
   "/handymen/register",
   "/contractors/register",
   "/suppliers/register",
+  "/users/forgot-password",
+  "/designers/forgot-password",
+  "/handymen/forgot-password",
+  "/contractors/forgot-password",
+  "/suppliers/forgot-password",
+  "/users/reset-password",
+  "/designers/reset-password",
+  "/handymen/reset-password",
+  "/contractors/reset-password",
+  "/suppliers/reset-password",
   "/forgot-password",
   "/reset-password"
 ];
@@ -40,28 +50,61 @@ const AUTH_PAGES = [
   "/forgot-password-supplier"
 ];
 
+const RESET_PASSWORD_PAGES = [
+  "/reset-password-user/",
+  "/reset-password-designer/",
+  "/reset-password-handyman/",
+  "/reset-password-contractor/",
+  "/reset-password-supplier/"
+];
+
+const clearAuthStorage = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("designerToken");
+  localStorage.removeItem("handymanToken");
+  localStorage.removeItem("contractorToken");
+  localStorage.removeItem("supplierToken");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("firstName");
+  localStorage.removeItem("lastName");
+  localStorage.removeItem("email");
+  localStorage.removeItem("isAdmin");
+  localStorage.removeItem("userType");
+};
+
+const getTokenByUserType = () => {
+  const userType = localStorage.getItem("userType");
+
+  switch (userType) {
+    case "designer":
+      return localStorage.getItem("designerToken");
+    case "handyman":
+      return localStorage.getItem("handymanToken");
+    case "contractor":
+      return localStorage.getItem("contractorToken");
+    case "supplier":
+      return localStorage.getItem("supplierToken");
+    case "admin":
+    case "user":
+    default:
+      return localStorage.getItem("token");
+  }
+};
+
+const isAuthPage = (path) => {
+  return (
+    AUTH_PAGES.includes(path) ||
+    RESET_PASSWORD_PAGES.some((prefix) => path.startsWith(prefix))
+  );
+};
+
+const isAuthRequest = (url) => {
+  return AUTH_ROUTES.some((route) => url.includes(route));
+};
+
 api.interceptors.request.use(
   (config) => {
-    const userType = localStorage.getItem("userType");
-
-    let token = null;
-
-    switch (userType) {
-      case "designer":
-        token = localStorage.getItem("designerToken");
-        break;
-      case "handyman":
-        token = localStorage.getItem("handymanToken");
-        break;
-      case "contractor":
-        token = localStorage.getItem("contractorToken");
-        break;
-      case "supplier":
-        token = localStorage.getItem("supplierToken");
-        break;
-      default:
-        token = localStorage.getItem("token");
-    }
+    const token = getTokenByUserType();
 
     if (token) {
       config.headers = config.headers || {};
@@ -80,28 +123,11 @@ api.interceptors.response.use(
     const requestUrl = error.config?.url || "";
     const currentPath = window.location.pathname;
 
-    const isAuthRequest = AUTH_ROUTES.some((route) => requestUrl.includes(route));
-    const isAuthPage =
-      AUTH_PAGES.includes(currentPath) ||
-      currentPath.startsWith("/reset-password-user/") ||
-      currentPath.startsWith("/reset-password-designer/") ||
-      currentPath.startsWith("/reset-password-handyman/") ||
-      currentPath.startsWith("/reset-password-contractor/") ||
-      currentPath.startsWith("/reset-password-supplier/");
+    const authRequest = isAuthRequest(requestUrl);
+    const authPage = isAuthPage(currentPath);
 
-    if ((status === 401 || status === 403) && !isAuthRequest && !isAuthPage) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("designerToken");
-      localStorage.removeItem("handymanToken");
-      localStorage.removeItem("contractorToken");
-      localStorage.removeItem("supplierToken");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("firstName");
-      localStorage.removeItem("lastName");
-      localStorage.removeItem("email");
-      localStorage.removeItem("isAdmin");
-      localStorage.removeItem("userType");
-
+    if ((status === 401 || status === 403) && !authRequest && !authPage) {
+      clearAuthStorage();
       window.location.href = "/login";
     }
 

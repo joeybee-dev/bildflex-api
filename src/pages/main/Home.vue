@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page">
+  <div id="top" class="home-page">
     <section class="hero-section d-flex align-items-center">
       <div class="hero-overlay"></div>
 
@@ -59,6 +59,7 @@
       </div>
     </section>
 
+<!-- PROVIDERS SELECTION -->
     <section class="services-section py-5">
       <div class="container">
         <div class="text-center mb-5">
@@ -143,60 +144,47 @@
       </div>
     </section>
 
+<!-- FEATURED PROVIDERS -->
     <section class="featured-section py-5">
       <div class="container">
-        <div
-          v-for="group in featuredExperts"
-          :key="group.category"
-          class="featured-group mb-5"
-        >
-          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-            <div>
-              <h2 class="section-title mb-1">{{ group.category }}</h2>
-              <p class="section-subtitle mb-0">
-                Featured {{ group.category.toLowerCase() }} professionals
-              </p>
-            </div>
-
-            <button class="btn view-all-btn btn-sm">View All</button>
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+          <div>
+            <h2 class="section-title mb-1">Featured Providers</h2>
+            <p class="section-subtitle mb-0">
+              Explore trusted handymen, designers, contractors, and suppliers for your project needs.
+            </p>
           </div>
+        </div>
 
-          <div class="row g-4">
-            <div
-              v-for="expert in group.experts"
-              :key="expert.id"
-              class="col-12 col-sm-6 col-lg-3"
-            >
-              <div class="card shadow-sm h-100 expert-card">
-                <img
-                  :src="expert.image"
-                  class="card-img-top expert-image"
-                  :alt="expert.name"
-                />
+        <div class="featured-group mb-5">
+          <FeaturedHandymen />
+        </div>
 
-                <div class="card-body d-flex flex-column">
-                  <span class="badge expert-badge mb-2 align-self-start">
-                    {{ group.category }}
-                  </span>
+        <div class="featured-group mb-5">
+          <FeaturedDesigners />
+        </div>
 
-                  <h5 class="card-title fw-bold mb-1">{{ expert.name }}</h5>
-                  <p class="expert-location small mb-2">{{ expert.location }}</p>
-                  <p class="card-text expert-description flex-grow-1">
-                    {{ expert.description }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="featured-group mb-5">
+          <FeaturedContractors />
+        </div>
+
+        <div class="featured-group">
+          <FeaturedSuppliers />
         </div>
       </div>
     </section>
+
+
   </div>
 </template>
 
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import FeaturedHandymen from "@/components/handymen/FeaturedHandymen.vue"
+import FeaturedDesigners from "@/components/designers/FeaturedDesigners.vue"
+import FeaturedContractors from "@/components/contractors/FeaturedContractors.vue"
+import FeaturedSuppliers from "@/components/suppliers/FeaturedSuppliers.vue"
 
 const router = useRouter();
 
@@ -221,28 +209,7 @@ const goToJoinPage = () => {
   router.push("/join-bildflex");
 };
 
-const highlights = [
-  {
-    title: "Handyman",
-    icon: "construction",
-    description: "Skilled repair and maintenance professionals for home and site work."
-  },
-  {
-    title: "Designers",
-    icon: "draw",
-    description: "Creative experts for plans, layouts, and design concepts."
-  },
-  {
-    title: "Contractors",
-    icon: "engineering",
-    description: "Trusted builders for residential, commercial, and industrial projects."
-  },
-  {
-    title: "Suppliers",
-    icon: "inventory_2",
-    description: "Reliable sources for materials, equipment, and construction supplies."
-  }
-];
+
 
 const featuredExperts = [
   {

@@ -49,6 +49,7 @@ const dashboardRoute = computed(() => {
       return "/admin/suppliers";
     default:
       return "/all-users";
+
   }
 });
 
@@ -322,7 +323,7 @@ onBeforeUnmount(() => {
                     My Profile
                   </router-link>
                 </li>
-
+<!-- 
                 <li v-if="dashboardRoute">
                   <router-link
                     :to="dashboardRoute"
@@ -331,7 +332,7 @@ onBeforeUnmount(() => {
                   >
                     Admin Dashboard
                   </router-link>
-                </li>
+                </li> -->
 
                 <li><hr class="dropdown-divider" /></li>
 
