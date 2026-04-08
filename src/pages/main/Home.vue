@@ -60,9 +60,9 @@
     </section>
 
 <!-- PROVIDERS SELECTION -->
-    <section class="services-section py-5">
+    <section class="services-section py-4">
       <div class="container">
-        <div class="text-center mb-5">
+        <div class="text-start mb-4">
           <h2 class="section-title">Explore Services</h2>
           <p class="section-subtitle">
             Find the right expert for your project needs
@@ -145,30 +145,30 @@
     </section>
 
 <!-- FEATURED PROVIDERS -->
-    <section class="featured-section py-5">
+    <section class="featured-section py-4">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
           <div>
             <h2 class="section-title mb-1">Featured Providers</h2>
             <p class="section-subtitle mb-0">
-              Explore trusted handymen, designers, contractors, and suppliers for your project needs.
+              Explore trusted handymen, architects, engineers, contractors, and suppliers for your project needs.
             </p>
           </div>
         </div>
 
-        <div class="featured-group mb-5">
+        <div class="featured-group mb-4">
           <FeaturedHandymen />
         </div>
 
-        <div class="featured-group mb-5">
+        <div class="featured-group mb-4">
           <FeaturedDesigners />
         </div>
 
-        <div class="featured-group mb-5">
+        <div class="featured-group mb-4">
           <FeaturedContractors />
         </div>
 
-        <div class="featured-group">
+        <div class="featured-group mb-4">
           <FeaturedSuppliers />
         </div>
       </div>
@@ -209,142 +209,6 @@ const goToJoinPage = () => {
   router.push("/join-bildflex");
 };
 
-
-
-const featuredExperts = [
-  {
-    category: "Handyman",
-    experts: [
-      {
-        id: 1,
-        name: "Mark Dela Cruz",
-        location: "Quezon City",
-        description: "General repair specialist for electrical, plumbing, and maintenance work.",
-        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 2,
-        name: "Ramon Perez",
-        location: "Pasig City",
-        description: "Experienced handyman for home repair, installation, and renovation support.",
-        image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 3,
-        name: "Joel Santos",
-        location: "Makati City",
-        description: "On-call repair expert for small construction and maintenance jobs.",
-        image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 4,
-        name: "Eric Mendoza",
-        location: "Taguig City",
-        description: "Reliable service provider for fixtures, carpentry, and repair work.",
-        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80"
-      }
-    ]
-  },
-  {
-    category: "Designer",
-    experts: [
-      {
-        id: 5,
-        name: "Ar. Camille Reyes",
-        location: "Manila",
-        description: "Architectural designer specializing in residential and mixed-use spaces.",
-        image: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 6,
-        name: "Engr. Paul Navarro",
-        location: "Cebu City",
-        description: "Planning and design expert for structural and construction-ready concepts.",
-        image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 7,
-        name: "Ar. Nina Lopez",
-        location: "Davao City",
-        description: "Interior and building designer for modern residential and office projects.",
-        image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 8,
-        name: "Engr. Carlo Torres",
-        location: "Quezon City",
-        description: "CAD, drafting, and floorplan specialist for commercial developments.",
-        image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80"
-      }
-    ]
-  },
-  {
-    category: "Contractor",
-    experts: [
-      {
-        id: 9,
-        name: "BuildPro Works",
-        location: "Muntinlupa City",
-        description: "Full-service contractor for civil, structural, and fit-out works.",
-        image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 10,
-        name: "Prime Construct",
-        location: "Caloocan City",
-        description: "Construction contractor for residential builds and commercial renovations.",
-        image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 11,
-        name: "Northline Builders",
-        location: "Quezon Province",
-        description: "Trusted team for project execution, supervision, and finishing works.",
-        image: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 12,
-        name: "Metro Civil Group",
-        location: "Pasay City",
-        description: "Experienced contractor for infrastructure, commercial, and industrial jobs.",
-        image: "https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?auto=format&fit=crop&w=800&q=80"
-      }
-    ]
-  },
-  {
-    category: "Supplier",
-    experts: [
-      {
-        id: 13,
-        name: "Steel & Build Supply",
-        location: "Valenzuela City",
-        description: "Supplier of structural materials, tools, and project essentials.",
-        image: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 14,
-        name: "Construct Mart",
-        location: "Meycauayan",
-        description: "One-stop source for construction materials and finishing products.",
-        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 15,
-        name: "Pro Equip Source",
-        location: "Marikina City",
-        description: "Equipment, safety gear, and supply solutions for various project sizes.",
-        image: "https://images.unsplash.com/photo-1581092335397-9583eb92d232?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: 16,
-        name: "Builders Choice Depot",
-        location: "Bacoor",
-        description: "Reliable partner for hardware, cement, paint, and construction supplies.",
-        image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80"
-      }
-    ]
-  }
-];
 </script>
 
 <style scoped>
@@ -473,13 +337,13 @@ const featuredExperts = [
 }
 
 .section-title {
-  font-size: 1.9rem;
-  font-weight: 800;
+  font-size: 1.3rem;
+  font-weight: 700;
   color: #003e86;
 }
 
 .section-subtitle {
-  font-size: 1rem;
+  font-size: .85rem;
   color: #6c757d;
 }
 

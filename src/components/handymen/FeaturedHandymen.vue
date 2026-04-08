@@ -1,10 +1,11 @@
 <template>
   <div class="featured-handymen-page">
-    <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
       <h3 class="section-title mb-1">Handymen</h3>
-    <!--   <p class="section-subtitle mb-0">
-        Featured handymen for repair, maintenance, and installation services.
-      </p> -->
+
+      <router-link to="/handymen" class="view-all-link">
+            View All
+      </router-link>
     </div>
 
     <div v-if="loading" class="text-center py-5">
@@ -22,6 +23,7 @@
       </p>
     </div>
 
+<!-- Card Handyman -->
     <div v-else class="row g-4">
       <div
         v-for="handyman in featuredHandymen.slice(0, 4)"
@@ -32,47 +34,56 @@
           :to="`/handymen/${handyman._id}`"
           class="text-decoration-none"
         >
-          <div class="card featured-card border-0 shadow-sm h-100">
-            <div class="card-body p-4 text-center">
-              <div class="profile-photo-wrapper mx-auto mb-3">
-                <img
-                  :src="getProfilePhoto(handyman)"
-                  :alt="handyman.firstName || 'Handyman'"
-                  class="profile-photo"
-                />
+          <div class="card featured-card shadow-sm h-100">
+            <div class="card-body p-3">
+              <!-- Top Part -->
+              <div class="top-section d-flex align-items-start mb-2">
+                <div class="profile-photo-wrapper flex-shrink-0 me-4">
+                  <img
+                    :src="getProfilePhoto(handyman)"
+                    :alt="handyman.firstName"
+                    class="profile-photo"
+                  />
+                </div>
+
+                <div class="top-details text-start">
+                  <div class="ratings-box mb-1">
+                    <div class="rating-value">
+                      ⭐ {{ formatRating(handyman.averageRatings) }}
+                    </div>
+                    <div class="review-count">
+                      {{ handyman.totalReviews || 0 }} reviews
+                    </div>
+                    <div>
+                      <span
+                        class="availability-badge"
+                        :class="getAvailabilityClass(handyman.availabilityStatus)"
+                      >
+                        {{ handyman.availabilityStatus || "Not specified" }}
+                      </span>
+                    </div>
+                  </div>
+
+                
+                </div>
               </div>
 
-              <h5 class="card-title mb-1">
-                {{ handyman.firstName || "Unnamed Handyman" }}
-              </h5>
+              <!-- Bottom Part -->             
+              <div class="bottom-section text-start">
+                <h5 class="card-name mb-0">
+                  {{ handyman.firstName }}
+                </h5>
+                <div class="skills-wrapper mb-0">
+                  <p class="skills-text mb-0">
+                    {{ formatSkills(handyman.skills) }}
+                  </p>
+                </div>
 
-              <p class="city-text mb-2">
-                {{ handyman.city || "Location not available" }}
-              </p>
-
-              <div class="mb-3">
-                <span
-                  class="availability-badge"
-                  :class="getAvailabilityClass(handyman.availabilityStatus)"
-                >
-                  {{ handyman.availabilityStatus || "Not specified" }}
-                </span>
-              </div>
-
-              <div class="skills-wrapper mb-3">
-                <p class="label-text mb-1">Skills</p>
-                <p class="skills-text mb-0">
-                  {{ formatSkills(handyman.skills) }}
+                <p class="city-text mb-2">
+                  {{ handyman.city || "Location not available" }}
                 </p>
-              </div>
 
-              <div class="ratings-box">
-                <div class="rating-value">
-                  ⭐ {{ formatRating(handyman.averageRatings) }}
-                </div>
-                <div class="review-count">
-                  {{ handyman.totalReviews || 0 }} reviews
-                </div>
+                
               </div>
             </div>
           </div>
@@ -158,8 +169,8 @@ onMounted(fetchFeaturedHandymen);
 
 .section-title {
   color: #003e86;
-  font-weight: 800;
-  font-size: 1.8rem;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .section-subtitle {
@@ -168,8 +179,20 @@ onMounted(fetchFeaturedHandymen);
   max-width: 700px;
 }
 
+.view-all-link {
+  color: #ffc107;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
 .featured-card {
-  border-radius: 20px;
+  border-radius: 10px;
+  /*border: .5px, solid, #6c757d;*/
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -179,11 +202,10 @@ onMounted(fetchFeaturedHandymen);
 }
 
 .profile-photo-wrapper {
-  width: 110px;
-  height: 110px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   overflow: hidden;
-  border: 4px solid #ffc107;
   background-color: #ffffff;
 }
 
@@ -193,9 +215,10 @@ onMounted(fetchFeaturedHandymen);
   object-fit: cover;
 }
 
-.card-title {
+.card-name {
   color: #003e86;
-  font-weight: 800;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .city-text {
@@ -210,15 +233,15 @@ onMounted(fetchFeaturedHandymen);
 }
 
 .skills-text {
-  color: #6c757d;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  min-height: 48px;
+  color: #003e86;
+  font-size: 1rem;
+  font-weight: 500;
+
 }
 
 .availability-badge {
   display: inline-block;
-  padding: 0.45rem 0.85rem;
+  padding: 0.1rem 0.4rem;
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 700;
@@ -245,19 +268,20 @@ onMounted(fetchFeaturedHandymen);
 }
 
 .ratings-box {
-  border-top: 1px solid rgba(0, 62, 134, 0.08);
-  padding-top: 1rem;
+  /*border-top: 1px solid rgba(0, 62, 134, 0.08);*/
+  padding-top: .9rem;
 }
 
 .rating-value {
   color: #003e86;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 1rem;
 }
 
 .review-count {
   color: #6c757d;
   font-size: 0.9rem;
+  padding-left: 4px;
 }
 
 .empty-state {
