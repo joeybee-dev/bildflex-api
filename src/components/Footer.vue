@@ -5,9 +5,10 @@ const year = new Date().getFullYear();
 <template>
   <footer class="site-footer">
     <div class="container py-4">
-      <div class="row g-4">
-        <div href="/" class="brand-block col-12 col-md-6 col-lg-4 me-3">
-          <div class="footer-brand d-flex align-items-center mb-2">
+      <div class="row g-4 justify-content-center">
+        
+        <div class="col-12 col-md-8 col-lg-4 me-lg-3 text-center text-lg-start">
+          <div class="footer-brand d-flex align-items-center justify-content-center justify-content-lg-start mb-2">
             <img
               src="/favicon.ico"
               alt="bildflex logo"
@@ -29,7 +30,7 @@ const year = new Date().getFullYear();
           </p>
         </div>
 
-        <div class="d-none d-md-block col-md-3 col-lg-2 ms-3">
+        <div class="d-none d-lg-block col-lg-2 ms-lg-3">
           <h6 class="footer-heading">Quick Links</h6>
           <ul class="footer-links list-unstyled mb-0">
             <li>
@@ -39,45 +40,44 @@ const year = new Date().getFullYear();
               <router-link to="/blogs">Blogs</router-link>
             </li>
             <li>
-              <router-link to="/login">Login Guest</router-link>
+              <router-link to="/login">Guest login</router-link>
             </li>
           </ul>
         </div>
 
-        <div class="d-none d-md-block col-md-3 col-lg-2 ms-3">
+        <div class="d-none d-lg-block col-lg-2 ms-lg-3">
           <h6 class="footer-heading">Providers</h6>
           <ul class="footer-links list-unstyled mb-0">
             <li>
-              <router-link to="/join-bildflex">Join as Provider</router-link>
+              <router-link to="/join-bildflex">Join Bildflex</router-link>
             </li>
             <li>
-              <router-link to="/join-bildflex">Provider Login</router-link>
+              <router-link to="/join-bildflex">Provider login</router-link>
             </li>
           </ul>
         </div>
 
-        <div class="col-12 col-lg-3 text-center text-lg-start">
+        <div class="col-12 col-md-8 col-lg-3 text-center text-lg-start">
           <h6 class="footer-heading">Contact Us</h6>
           <ul class="footer-contact list-unstyled mb-0">
             <li>
               <router-link to="/feedback" class="contact-link">
-                Email: support@bildflex.com
+                <i class="bi bi-envelope me-2"></i>
+                support@bildflex.com
               </router-link>
             </li>
           </ul>
         </div>
-
-        
       </div>
     </div>
 
     <div class="footer-bottom">
-      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 py-3">
+      <div class="container d-flex flex-column flex-md-column flex-lg-row justify-content-between align-items-center gap-2 py-3 text-center text-lg-start">
         <p class="mb-0 copyright">
           © {{ year }} bildflex. All rights reserved.
         </p>
 
-        <div class="footer-bottom-links d-flex flex-wrap gap-3">
+        <div class="footer-bottom-links d-flex flex-wrap justify-content-center gap-3">
           <router-link to="/privacy-policy">Privacy Policy</router-link>
           <router-link to="/terms-of-service">Terms Of Service</router-link>
           <router-link to="/feedback">Support</router-link>
@@ -126,7 +126,6 @@ const year = new Date().getFullYear();
   bottom: 0;
   width: 42px;
   height: 2px;
-  /*background-color: #ffc107;*/
   border-radius: 3px;
 }
 
@@ -145,10 +144,6 @@ const year = new Date().getFullYear();
 .footer-links a:hover,
 .footer-bottom-links a:hover {
   color: #ffc107;
-}
-
-.footer-contact {
-  color: red;
 }
 
 .contact-link {
@@ -172,7 +167,7 @@ const year = new Date().getFullYear();
   font-size: 0.92rem;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 991.98px) {
   .site-footer {
     text-align: center;
   }
@@ -188,8 +183,6 @@ const year = new Date().getFullYear();
 
   .footer-brand {
     justify-content: center;
-
   }
-
 }
 </style>

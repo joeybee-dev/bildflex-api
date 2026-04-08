@@ -59,7 +59,7 @@
     </section>
 
 <!-- PROVIDERS SELECTION -->
-    <section class="services-section py-4">
+    <section class="services-section py-5">
       <div class="container">
         <div class="text-start mb-4">
           <h2 class="section-title">Explore Services</h2>
@@ -98,7 +98,7 @@
                   </div>
                   <h5 class="service-card-title fw-bold mb-2">Designers</h5>
                   <p class="service-card-text mb-0">
-                    Creative experts for plans, layouts, and design concepts.
+                    Expert architects and engineers delivering creative plans, layouts, and design concepts.
                   </p>
                 </div>
               </div>
@@ -144,7 +144,7 @@
     </section>
 
 <!-- FEATURED PROVIDERS -->
-    <section class="featured-section py-4">
+    <section class="featured-section py-5">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
           <div>

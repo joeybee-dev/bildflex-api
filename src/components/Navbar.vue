@@ -178,7 +178,7 @@ onBeforeUnmount(() => {
                   class="dropdown-item"
                   @click="closeNavbarOnMobile"
                 >
-                  Handyman
+                  Handymen
                 </router-link>
               </li>
 
@@ -271,7 +271,7 @@ onBeforeUnmount(() => {
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Login as User
+                    Login as Guest
                   </router-link>
                 </li>
                 <li>
