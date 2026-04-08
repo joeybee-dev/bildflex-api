@@ -358,7 +358,7 @@ onBeforeUnmount(() => {
 .site-navbar {
   background-color: #003e86;
   color: #ffffff;
-  border-bottom: 3px solid #ffc107;
+  border-bottom: 1px solid #ffc107;
 }
 
 .brand-text {

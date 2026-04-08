@@ -9,8 +9,7 @@
             <p class="hero-label mb-2">TRUSTED CONSTRUCTION NETWORK</p>
             <h1 class="hero-title mb-3">Find construction experts near you</h1>
             <p class="hero-subtitle mx-auto mb-4">
-              Connect with trusted handymen, designers, contractors, and suppliers
-              for residential, commercial, and industrial projects.
+              Connect with trusted architects, engineers, handymen, contractors, and suppliers for your projects.
             </p>
 
             <div class="search-wrapper shadow-lg">
@@ -229,8 +228,8 @@ const goToJoinPage = () => {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(0, 62, 134, 0.78), rgba(0, 62, 134, 0.78)),
-    rgba(0, 0, 0, 0.2);
+    linear-gradient(rgba(0, 62, 134, 0.5), rgba(0, 62, 134, 0.6)),
+    rgba(0, 0, 0, 0.1);
 }
 
 .hero-content {
@@ -269,8 +268,8 @@ const goToJoinPage = () => {
 
 .search-input {
   min-height: 54px;
-  border-radius: 12px;
-  border: 2px solid #ffc107;
+  border-radius: 10px;
+  border: 1px solid #ffc107;
   background-color: #ffffff;
   color: #003e86;
 }
@@ -282,7 +281,7 @@ const goToJoinPage = () => {
 
 .search-btn {
   min-height: 54px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 700;
   background-color: #ffc107;
   color: #003e86;
@@ -301,7 +300,6 @@ const goToJoinPage = () => {
   justify-content: center;
   align-items: center;
   padding: 0.85rem 1.4rem;
-  border: 2px solid #ffc107;
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -322,9 +320,7 @@ const goToJoinPage = () => {
   display: inline-block;
   color: #ffc107;
   font-weight: 700;
-  text-decoration: none;
-  border-bottom: 2px solid #ffc107;
-  padding-bottom: 2px;
+  padding-bottom: 1px;
   transition: all 0.25s ease;
 }
 

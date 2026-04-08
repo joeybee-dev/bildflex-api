@@ -4,10 +4,10 @@ const year = new Date().getFullYear();
 
 <template>
   <footer class="site-footer">
-    <div class="container py-5">
+    <div class="container py-4">
       <div class="row g-4">
-        <div href="/" class="brand-block col-12 col-md-6 col-lg-4">
-          <div class="footer-brand d-flex align-items-center mb-3">
+        <div href="/" class="brand-block col-12 col-md-6 col-lg-4 me-3">
+          <div class="footer-brand d-flex align-items-center mb-2">
             <img
               src="/favicon.ico"
               alt="bildflex logo"
@@ -18,7 +18,7 @@ const year = new Date().getFullYear();
             <h5 class="mb-0 brand-text">bildflex</h5>
           </div>
 
-          <p class="footer-description mb-3">
+          <p class="footer-description mb-2">
             Trusted construction network connecting clients with reliable
             handymen, designers, contractors, and suppliers for residential,
             commercial, and industrial projects.
@@ -29,7 +29,7 @@ const year = new Date().getFullYear();
           </p>
         </div>
 
-        <div class="col-6 col-md-3 col-lg-2">
+        <div class="d-none d-md-block col-md-3 col-lg-2 ms-3">
           <h6 class="footer-heading">Quick Links</h6>
           <ul class="footer-links list-unstyled mb-0">
             <li>
@@ -39,37 +39,35 @@ const year = new Date().getFullYear();
               <router-link to="/blogs">Blogs</router-link>
             </li>
             <li>
-              <router-link to="/login">Login User</router-link>
+              <router-link to="/login">Login Guest</router-link>
             </li>
           </ul>
         </div>
 
-        <div class="col-6 col-md-3 col-lg-3">
-          <h6 class="footer-heading">For Providers</h6>
+        <div class="d-none d-md-block col-md-3 col-lg-2 ms-3">
+          <h6 class="footer-heading">Providers</h6>
           <ul class="footer-links list-unstyled mb-0">
             <li>
-              <router-link to="/join-bildflex">Join as Service Provider</router-link>
+              <router-link to="/join-bildflex">Join as Provider</router-link>
             </li>
             <li>
               <router-link to="/join-bildflex">Provider Login</router-link>
             </li>
-          <!--   <li>
-              <a>List Your Services</a>
-            </li>
-            <li>
-              <a>Grow Your Network</a>
-            </li> -->
           </ul>
         </div>
 
-        <div class="col-12 col-lg-3">
-          <h6 class="footer-heading">Contact</h6>
+        <div class="col-12 col-lg-3 text-center text-lg-start">
+          <h6 class="footer-heading">Contact Us</h6>
           <ul class="footer-contact list-unstyled mb-0">
-            <router-link to="/feedback">Email: support@bildflex.com</router-link>
-            <!-- <li>Phone: +63 912 345 6789</li> -->
-            <!-- <li>Location: Quezon City, Philippines</li> -->
+            <li>
+              <router-link to="/feedback" class="contact-link">
+                Email: support@bildflex.com
+              </router-link>
+            </li>
           </ul>
         </div>
+
+        
       </div>
     </div>
 
@@ -93,7 +91,7 @@ const year = new Date().getFullYear();
 .site-footer {
   background-color: #003e86;
   color: #ffffff;
-  border-top: 3px solid #ffc107;
+  border-top: 1px solid #ffc107;
 }
 
 .brand-text {
@@ -128,13 +126,13 @@ const year = new Date().getFullYear();
   bottom: 0;
   width: 42px;
   height: 2px;
-  background-color: #ffc107;
+  /*background-color: #ffc107;*/
   border-radius: 3px;
 }
 
 .footer-links li,
 .footer-contact li {
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
 }
 
 .footer-links a,
@@ -149,8 +147,19 @@ const year = new Date().getFullYear();
   color: #ffc107;
 }
 
-.footer-contact li {
-  color: #f4f6f8;
+.footer-contact {
+  color: red;
+}
+
+.contact-link {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.contact-link:hover {
+  color: #ffc107;
+  text-decoration: none;
 }
 
 .footer-bottom {
