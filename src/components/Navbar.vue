@@ -54,11 +54,16 @@ const dashboardRoute = computed(() => {
 });
 
 const accountLabel = computed(() => {
+  if (!isLoggedIn.value) return "";
+  return userStore.user?.firstName || "Account";
+});
+
+/*const accountLabel = computed(() => {
   if (!isLoggedIn.value) return;
 
   switch (userType.value) {
     case "user":
-      return "User";
+      return "Guest";
     case "designer":
       return "Designer";
     case "handyman":
@@ -70,7 +75,7 @@ const accountLabel = computed(() => {
     default:
       return "Account";
   }
-});
+});*/
 
 const toggleAccountDropdown = () => {
   showAccountDropdown.value = !showAccountDropdown.value;
@@ -255,7 +260,8 @@ onBeforeUnmount(() => {
             >
               <span class="d-flex align-items-center">
                 <span class="material-symbols-outlined me-1">account_circle</span>
-                <span>{{ accountLabel }}</span>
+                <span>{{ isLoggedIn ? accountLabel : "Login" }}</span>
+                <!-- <span>{{ accountLabel }}</span> -->
               </span>
               <span class="ms-2">▾</span>
             </button>
@@ -271,7 +277,7 @@ onBeforeUnmount(() => {
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Login as Guest
+                    Guest
                   </router-link>
                 </li>
                 <li>
@@ -280,7 +286,7 @@ onBeforeUnmount(() => {
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Login as Handyman
+                    Handyman
                   </router-link>
                 </li>
                 <li>
@@ -289,7 +295,7 @@ onBeforeUnmount(() => {
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Login as Designer
+                    Designer
                   </router-link>
                 </li>
                 <li>
@@ -298,7 +304,7 @@ onBeforeUnmount(() => {
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Login as Contractor
+                    Contractor
                   </router-link>
                 </li>
                 <li>
@@ -307,7 +313,7 @@ onBeforeUnmount(() => {
                     class="dropdown-item"
                     @click="closeNavbarOnMobile"
                   >
-                    Login as Supplier
+                    Supplier
                   </router-link>
                 </li>
 

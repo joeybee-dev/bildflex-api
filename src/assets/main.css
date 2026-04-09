@@ -1,69 +1,68 @@
 /*
-  Official Colors: 
+  Official Colors:
   #ffc107 = yellow
-  #003E86 = dark
+  #003E86 = dark blue
 */
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f0f7ff;
+}
+
+h1,
+h2,
+h3,
+h4,
+.nav-link {
+  font-family: "Montserrat", serif;
+  color: #003e86;
+}
+
+h1 {
+  font-family: "Montserrat", serif;
+  font-weight: 750;
+  font-size: 45px;
+  line-height: 30px;
+  color: #003e86;
+}
 
 #menu {
-
-  /* UI Properties */
-  background: #003E86 0% 0% no-repeat padding-box;
-  opacity: 1;
+  background: #003e86;
 }
 
-#hm, #prjcts, #tls, #cntct {
-  /* Layout Properties */
+#hm,
+#prjcts,
+#tls,
+#cntct {
   margin-left: 50px;
-  /* UI Properties */
   text-align: center;
-  font: normal normal 500 20px Montserrat;
-  letter-spacing: 0px;
-  color: #FFFFFF;
-  opacity: 1;
+  font-family: "Montserrat", serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #ffffff;
 }
+
 #landing {
-  /* UI Properties */
-  background: #CBDCF2 0% 0% no-repeat padding-box;
-  opacity: 1;
+  background: #cbdcf2;
 }
 
 .landing-text {
-  color: #003E86;
-  opacity: 1;
-}
-
-.card {
-  /* Layout Properties */
-
-  /* UI Properties */
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-  box-shadow: -1px 3px 6px #00000029;
-  border-radius: 15px;
-  opacity: 1;
-}
-.card-title {
-  /* UI Properties */
-  text-align: left;
-  font: normal normal 600 20px Montserrat;
-  letter-spacing: 0px;
-  color: #003E86;
+  color: #003e86;
 }
 
 .card-text {
-  /* UI Properties */
   text-align: left;
-  font: normal normal medium 14px Montserrat;
-  letter-spacing: 0px;
-  color: #003E86;
+  font-family: "Montserrat", serif;
+  font-size: 14px;
+  color: #003e86;
 }
 
 .card-img {
-  padding-top: 25px;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 0px;
-  opacity: 1;
+  padding: 25px 5px 0;
 }
 
 .tools-img {
@@ -75,29 +74,34 @@
   margin: auto;
   padding: 50px 20px;
 }
+
 .contact-form-control {
   background-color: transparent;
-  border: 1px solid #003C82;
-  color: #003C82;
+  border: 1px solid #003e86;
+  color: #003e86;
   padding: 12px;
   font-size: 16px;
 }
+
 .contact-form-control::placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
+
 .submit-btn {
-  background-color: #3A86FF;
-  color: white;
+  background-color: #3a86ff;
+  color: #ffffff;
+  border: none;
   border-radius: 30px;
   padding: 12px 30px;
-  border: none;
   font-size: 16px;
 }
+
 .social-icons a {
   font-size: 28px;
   margin-right: 15px;
-  color: #0C2D57;
+  color: #0c2d57;
 }
+
 .map-container iframe {
   width: 100%;
   height: 350px;
@@ -119,30 +123,6 @@
   font-size: 2rem;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: "Poppins",sans-serif; 
-  background: #F0F7FF 0% 0% no-repeat padding-box;
-  opacity: 1;
-}
-
-h1,h2,h3,h4, .nav-link,.card-title {
-  font-family: "Montserrat", serif;
-  color: #003E86;
-  opacity: 1;
-}
-
-h1 {
-  /* UI Properties */
-  font: normal normal 750 45px/30px Montserrat;
-  color: #003E86;
-}
-
-
 footer {
-  background: #003E86 0% 0% no-repeat padding-box;
-  opacity: 1;
+  background: #003e86;
 }

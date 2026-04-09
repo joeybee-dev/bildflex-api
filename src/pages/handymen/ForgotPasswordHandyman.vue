@@ -1,40 +1,59 @@
 <template>
-  <div class="auth-page py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-5">
-          <div class="card auth-card border-0 shadow-sm">
-            <div class="auth-header text-center">
-              <h2 class="auth-title mb-2">Forgot Password</h2>
-              <p class="auth-subtitle mb-0">
-                Enter your handyman email and we will send a reset link.
-              </p>
-            </div>
-
-            <div class="card-body p-4 p-md-5">
-              <form @submit.prevent="submitForgotPassword">
-                <div class="mb-3">
-                  <label class="form-label">Email</label>
-                  <input v-model.trim="form.email" type="email" class="form-control" required />
-                </div>
-
-                <div class="d-grid">
-                  <button type="submit" class="btn login-btn" :disabled="loading">
-                    {{ loading ? "Sending..." : "Send Reset Link" }}
-                  </button>
-                </div>
-              </form>
-
-              <p class="text-center auth-footer-text mt-4 mb-0">
-                Back to
-                <router-link to="/handyman/login" class="auth-link">Login</router-link>
-              </p>
-            </div>
-          </div>
+  <AuthCardWrapper
+    title="Forgot Password"
+    subtitle="Enter your email address and we will send you a password reset link."
+    textAlign="start"
+  >
+    <form @submit.prevent="submitForgotPassword">
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="email" class="form-label">Email</label>
+          <input
+            id="email"
+            v-model.trim="form.email"
+            type="email"
+            class="form-control"
+            placeholder="Enter your email"
+            required
+            autocomplete="email"
+          />
         </div>
       </div>
+
+      <div class="d-grid mt-4">
+        <button
+          type="submit"
+          class="btn auth-btn"
+          :disabled="loading"
+        >
+          {{ loading ? "Sending..." : "Send Reset Link" }}
+        </button>
+      </div>
+    </form>
+
+    <div
+      v-if="message"
+      class="alert alert-success mt-4 mb-0"
+      role="alert"
+    >
+      {{ message }}
     </div>
-  </div>
+
+    <div
+      v-if="errorMessage"
+      class="alert alert-danger mt-4 mb-0"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+
+    <p class="text-center auth-footer-text mt-4 mb-0">
+      Remember your password?
+      <router-link to="/handyman/login" class="auth-link">
+        Login here
+      </router-link>
+    </p>
+  </AuthCardWrapper>
 </template>
 
 <script setup>
@@ -42,19 +61,39 @@ import { reactive, ref } from "vue";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
 import api from "@/services/api";
+import AuthCardWrapper from "@/components/AuthCardWrapper.vue";
 
 const notyf = new Notyf();
 const loading = ref(false);
-const form = reactive({ email: "" });
+const message = ref("");
+const errorMessage = ref("");
+
+const form = reactive({
+  email: ""
+});
 
 const submitForgotPassword = async () => {
+  message.value = "";
+  errorMessage.value = "";
+
   try {
     loading.value = true;
-    const response = await api.post("/handymen/forgot-password", form);
-    notyf.success(response.data?.message || "Reset link sent successfully.");
+
+    const response = await api.post("/handyman/forgot-password", {
+      email: form.email
+    });
+
+    message.value =
+      response.data?.message || "Password reset link sent successfully.";
+    notyf.success(message.value);
     form.email = "";
   } catch (err) {
-    notyf.error(err.response?.data?.error || "Failed to send reset link.");
+    console.error("Forgot password error:", err);
+    errorMessage.value =
+      err.response?.data?.error ||
+      err.response?.data?.message ||
+      "Failed to send reset link.";
+    notyf.error(errorMessage.value);
   } finally {
     loading.value = false;
   }
@@ -62,16 +101,8 @@ const submitForgotPassword = async () => {
 </script>
 
 <style scoped>
-.auth-page { min-height: 100vh; background-color: #f4f6f8; display: flex; align-items: center; }
-.auth-card { border-radius: 20px; overflow: hidden; background-color: #fff; border: 1px solid rgba(0,62,134,.1); }
-.auth-header { border-bottom: 3px solid #ffc107; padding: 2rem 1.5rem 1.75rem; }
-.auth-title { color: #003e86; font-weight: 800; }
-.auth-subtitle { color: #003e86; }
-.form-label { color: #003e86; font-weight: 700; margin-bottom: .45rem; }
-.form-control { min-height: 48px; border-radius: 12px; border: 1px solid rgba(0,62,134,.18); }
-.form-control:focus { border-color: #ffc107; box-shadow: 0 0 0 .2rem rgba(255,193,7,.18); }
-.login-btn { min-height: 50px; border-radius: 12px; font-weight: 700; background-color: #003e86; color: #fff; border: 1px solid #003e86; }
-.login-btn:hover { background-color: #ffc107; color: #003e86; border-color: #ffc107; }
-.auth-link { color: #003e86; text-decoration: none; font-weight: 700; }
-.auth-footer-text { color: #6c757d; }
+.alert {
+  border-radius: 12px;
+  font-size: 0.94rem;
+}
 </style>

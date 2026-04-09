@@ -1,10 +1,10 @@
 <template>
-  <div class="featured-handymen-page">
+  <div class="featured-professionals-page">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h3 class="section-title mb-1">Handymen</h3>
 
       <router-link to="/handymen" class="view-all-link">
-            View All
+        View All
       </router-link>
     </div>
 
@@ -23,7 +23,6 @@
       </p>
     </div>
 
-<!-- Card Handyman -->
     <div v-else class="row g-4">
       <div
         v-for="handyman in featuredHandymen.slice(0, 4)"
@@ -31,12 +30,11 @@
         class="col-12 col-sm-6 col-lg-3"
       >
         <router-link
-          :to="`/handymen/${handyman._id}`"
+          :to="getProtectedRoute('details-handyman', handyman._id)"
           class="text-decoration-none"
         >
           <div class="card featured-card shadow-sm h-100">
             <div class="card-body p-3">
-              <!-- Top Part -->
               <div class="top-section d-flex align-items-start mb-2">
                 <div class="profile-photo-wrapper flex-shrink-0 me-4">
                   <img
@@ -63,12 +61,9 @@
                       </span>
                     </div>
                   </div>
-
-                
                 </div>
               </div>
 
-              <!-- Bottom Part -->             
               <div class="bottom-section text-start">
                 <h5 class="card-name mb-0">
                   {{ handyman.firstName }}
@@ -82,8 +77,6 @@
                 <p class="city-text mb-2">
                   {{ handyman.city || "Location not available" }}
                 </p>
-
-                
               </div>
             </div>
           </div>
@@ -94,20 +87,23 @@
 </template>
 
 <script setup>
+import "@/assets/professional-card-shared.css";
 import { onMounted, ref } from "vue";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
 import api from "@/services/api";
+import useFeaturedCardRoute from "@/composables/useFeaturedCardRoute";
 
 const notyf = new Notyf();
+const { getProtectedRoute } = useFeaturedCardRoute();
 
 const loading = ref(false);
 const featuredHandymen = ref([]);
 
 const getProfilePhoto = (handyman) => {
   if (handyman.profilePhoto) return handyman.profilePhoto;
-  if (handyman.gender === "Female") return "/src/assets/images/default-female.jpg";
-  return "/src/assets/images/default-male.jpg";
+  if (handyman.gender === "Female") return "/default-handyman-female.png";
+  return "/default-handyman-male.png";
 };
 
 const formatSkills = (skills) => {
@@ -162,137 +158,4 @@ const fetchFeaturedHandymen = async () => {
 onMounted(fetchFeaturedHandymen);
 </script>
 
-<style scoped>
-.featured-handymen-page {
-  min-height: auto;
-}
-
-.section-title {
-  color: #003e86;
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.section-subtitle {
-  color: #6c757d;
-  font-size: 1rem;
-  max-width: 700px;
-}
-
-.view-all-link {
-  color: #ffc107;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.view-all-link:hover {
-  text-decoration: underline;
-}
-
-.featured-card {
-  border-radius: 10px;
-  /*border: .5px, solid, #6c757d;*/
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.featured-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 1rem 2rem rgba(0, 62, 134, 0.08);
-}
-
-.profile-photo-wrapper {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #ffffff;
-}
-
-.profile-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card-name {
-  color: #003e86;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.city-text {
-  color: #6c757d;
-  font-size: 0.95rem;
-}
-
-.label-text {
-  color: #003e86;
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-
-.skills-text {
-  color: #003e86;
-  font-size: 1rem;
-  font-weight: 500;
-
-}
-
-.availability-badge {
-  display: inline-block;
-  padding: 0.1rem 0.4rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.availability-badge.available {
-  background-color: rgba(25, 135, 84, 0.12);
-  color: #198754;
-}
-
-.availability-badge.busy {
-  background-color: rgba(255, 193, 7, 0.18);
-  color: #9a6700;
-}
-
-.availability-badge.offline {
-  background-color: rgba(108, 117, 125, 0.14);
-  color: #6c757d;
-}
-
-.availability-badge.default {
-  background-color: rgba(0, 62, 134, 0.08);
-  color: #003e86;
-}
-
-.ratings-box {
-  /*border-top: 1px solid rgba(0, 62, 134, 0.08);*/
-  padding-top: .9rem;
-}
-
-.rating-value {
-  color: #003e86;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.review-count {
-  color: #6c757d;
-  font-size: 0.9rem;
-  padding-left: 4px;
-}
-
-.empty-state {
-  background-color: #ffffff;
-  border-radius: 20px;
-  border: 1px solid rgba(0, 62, 134, 0.08);
-}
-
-@media (max-width: 767.98px) {
-  .section-title {
-    font-size: 1.5rem;
-  }
-}
-</style>
+<style scoped></style>
